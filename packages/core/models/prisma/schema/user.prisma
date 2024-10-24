@@ -1,0 +1,80 @@
+model User {
+  id             String          @id @default(cuid())
+  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @db.Timestamptz(6)
+  name           String?
+  image          String?
+  email          String?         @unique
+  emailVerified  DateTime?
+  phoneNumber    String          @unique @map("phone_number")
+  hashedPassword String?
+  accounts       Account[]
+  sessions       Session[]
+  students       Student[]
+  academyMembers AcademyMember[]
+
+  @@map("user")
+}
+
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  refresh_token_expires_in Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
+}
+
+model AcademyMember {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  role              AcademyMemberRole
+  isPending         Boolean           @default(true) @map("is_pending")
+  isAlertSubscribed Boolean           @default(true) @map("is_alert_subscribed")
+
+  academyId String  @map("academy_id")
+  academy   Academy @relation(fields: [academyId], references: [id], onDelete: Cascade)
+
+  academyClasses AcademyClass[]
+  lectures       Lecture[]
+
+  phoneNumber String @map("phone_number")
+  user        User?  @relation(fields: [phoneNumber], references: [phoneNumber])
+
+  @@unique([academyId, phoneNumber])
+  @@map("academy_member")
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  isPending Boolean @default(true) @map("is_pending")
+
+  academyClassId String?       @map("academy_class_id")
+  academyClass   AcademyClass? @relation(fields: [academyClassId], references: [id])
+
+  phoneNumber String @map("phone_number")
+
+  userId String? @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id])
+
+  Academy   Academy? @relation(fields: [academyId], references: [id])
+  academyId String?
+
+  @@map("student")
+}

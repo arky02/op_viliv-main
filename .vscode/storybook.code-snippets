@@ -1,0 +1,27 @@
+{
+	"create new stories": {
+		"prefix": "cns",
+		"body": [
+			"import { $1 } from \"@design-system/ui\";",
+			"import type { Meta, StoryObj } from \"@storybook/react\";",
+			"",
+			"const meta: Meta<typeof $1> = {",
+			"\tcomponent: $1,",
+			"};",
+			"",
+			"export default meta;",
+			"",
+			"type Story = StoryObj<typeof $1>;",
+			"",
+			"export const Primary: Story = {",
+			"\trender: (props) => (",
+			"\t\t<$1>",
+			"\t\t</$1>",
+			"\t),",
+			"\tname: \"$1\",",
+			"};",
+			""
+		],
+		"description": "create new story"
+	}
+}

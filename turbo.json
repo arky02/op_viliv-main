@@ -1,0 +1,41 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env.*local"],
+	"globalEnv": [
+		"NODE_ENV",
+		"DATABASE_URL",
+		"NEXT_PUBLIC_PAYPLE_CLIENT_KEY",
+		"PAYPLE_API_URL",
+		"PAYPLE_HTTP_REFERER",
+		"PAYPLE_cstId",
+		"PAYPLE_CUST_KEY"
+	],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": [
+				".next/**",
+				"!.next/cache/**",
+				"storybook-static"
+			]
+		},
+		"generate": {
+			"cache": false
+		},
+		"db:migrate": {
+			"cache": false
+		},
+		"db:push": {
+			"cache": false
+		},
+		"db:pull": {
+			"cache": false
+		},
+		"lint": {},
+		"dev": {
+			"cache": false,
+			"persistent": true
+		},
+		"storybook": {}
+	}
+}

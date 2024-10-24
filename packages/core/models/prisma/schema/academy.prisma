@@ -1,0 +1,96 @@
+model Academy {
+  id        String   @id @unique @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  name          String
+  description   String?
+  image         String?
+  postCode      String? @map("post_code")
+  address       String?
+  addressDetail String? @map("address_detail")
+  credit        Int     @default(360000)
+
+  academyMembers AcademyMember[]
+  students       Student[]
+  academyClasses AcademyClass[]
+
+  academyPaymentCard AcademyPaymentCard?
+  payments           Payment[]
+
+  planId String @map("plan_id")
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  @@map("academy")
+}
+
+model AcademyClass {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  inviteCode String @unique @map("invite_code")
+
+  name        String
+  description String?
+  academyId   String  @map("academy_id")
+
+  students       Student[]
+  academyMembers AcademyMember[]
+  lectures       Lecture[]
+
+  academy Academy @relation(fields: [academyId], references: [id])
+
+  @@map("academy_class")
+}
+
+model Plan {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  name               SubscribePlan @default(FREE)
+  price              Int           @default(0)
+  duration           Int
+  contentsLimit      Int           @map("contents_limit")
+  academyMemberLimit Int           @map("academy_member_limit")
+
+  payments  Payment[]
+  academies Academy[]
+
+  @@map("plan")
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  planId        String   @map("plan_id")
+  amount        Int
+  currency      String
+  paymentMethod String   @map("payment_method")
+  expireDate    DateTime @map("expire_date") @db.Date()
+  academyId     String   @map("academy_id")
+
+  status PaymentStatus
+
+  plan    Plan    @relation(fields: [planId], references: [id])
+  academy Academy @relation(fields: [academyId], references: [id])
+
+  @@map("payment")
+}
+
+model AcademyPaymentCard {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  cardNumber String @map("card_number")
+  cardName   String @map("card_name")
+  billingKey String @map("billing_key")
+
+  academyId String  @unique @map("academy_id")
+  academy   Academy @relation(fields: [academyId], references: [id])
+
+  @@map("academy_payment_card")
+}

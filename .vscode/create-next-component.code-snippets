@@ -1,0 +1,104 @@
+{
+	"Create Next Component": {
+		"prefix": "nfce",
+		"body": [
+			"interface ${1:Component}Props {}",
+			"",
+			"function ${1:Component}() {",
+			"\treturn <div>${1:Component}</div>",
+			"}",
+			"",
+			"export { ${1:Component} }"
+		],
+		"description": "기본 컴포넌트"
+	},
+	"React Page Component": {
+		"prefix": "rpc",
+		"body": [
+			"export default function ${1:Page}() {",
+			"\treturn (",
+			"\t\t<div>",
+			"\t\t\t$2",
+			"\t\t</div>",
+			"\t)",
+			"}"
+		],
+		"description": "함수형 페이지 컴포넌트"
+	},
+
+	"React Page Component With Params": {
+		"prefix": "rpcwp",
+		"body": [
+			"interface ${1:Title}PageProps {",
+			"\tparams: {",
+			"\t\t${2:paramName}: string",
+			"\t}",
+			"}",
+			"",
+			"export default function ${1:Title}Page({",
+			"\tparams",
+			"}: ${1:Title}PageProps) {",
+			"\tconst { ${2:paramName} } = params",
+			"",
+			"\treturn <div>${3:content}/div>",
+			"}"
+		],
+
+		"description": "매개변수가 존재하는 함수형 페이지 컴포넌트"
+	},
+
+	"React Layout Component": {
+		"prefix": "rlc",
+		"body": [
+			"interface ${1:Title}LayoutProps {",
+			"\tchildren: React.ReactNode",
+			"}",
+			"",
+			"export default function ${1:Title}Layout({",
+			"\tchildren",
+			"}: ${1:Title}LayoutProps) {",
+			"\treturn <div>{children}</div>",
+			"}"
+		],
+		"description": "함수형 레이아웃 컴포넌트"
+	},
+
+	"React Component": {
+		"prefix": "rc",
+		"body": [
+			"import { cn } from '@core/utils'",
+			"",
+			"function ${TM_FILENAME_BASE/(\\w+(-\\w+)*)(\\.tsx)?$/${1:/pascalcase}/}() {",
+			"\treturn (",
+			"\t\t<div className={cn('$1')}>",
+			"\t\t\t$2",
+			"\t\t</div>",
+			")}",
+			"",
+			"export { ${TM_FILENAME_BASE/(\\w+(-\\w+)*)(\\.tsx)?$/${1:/pascalcase}/} }"
+		],
+
+		"description": "일반 함수형 컴포넌트"
+	},
+
+	"React Component With Props": {
+		"prefix": "rcwp",
+		"body": [
+			"import { cn } from '@core/utils'",
+			"",
+			"interface ${TM_FILENAME_BASE/(\\w+(-\\w+)*)(\\.tsx)?$/${1:/pascalcase}/}Props {",
+			"\t${1:propName}: ${2:string}",
+			"}",
+			"",
+			"function ${TM_FILENAME_BASE/(\\w+(-\\w+)*)(\\.tsx)?$/${1:/pascalcase}/}({",
+			"\t${1:propName}",
+			"}: ${TM_FILENAME_BASE/(\\w+(-\\w+)*)(\\.tsx)?$/${1:/pascalcase}/}Props) {",
+			"\treturn <div className={cn('')}>$3</div>",
+			"}",
+			"",
+			"export { ${TM_FILENAME_BASE/(\\w+(-\\w+)*)(\\.tsx)?$/${1:/pascalcase}/} }"
+		],
+
+		"description": "Props가 있는 일반 함수형 컴포넌트"
+	}
+}

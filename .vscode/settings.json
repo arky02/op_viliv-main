@@ -1,0 +1,48 @@
+{
+	"eslint.workingDirectories": [
+		{
+			"mode": "auto"
+		}
+	],
+	"tailwindCSS.classAttributes": [
+		"class",
+		"className",
+		"classNames",
+		"ngClass",
+		".*Class"
+	],
+	"tailwindCSS.experimental.classRegex": [
+		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+		["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+	],
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"editor.quickSuggestions": {
+		"strings": "on"
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.tabSize": 2,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "always",
+		"source.fixAll.prettier": "always"
+	},
+	"[prisma]": {
+		"editor.defaultFormatter": "Prisma.prisma"
+	},
+	"exportall.config.folderListener": [
+		"/apps/main/src/components",
+		"/apps/main/src/components/**",
+		"/apps/main/src/lib",
+		"/packages/core/models"
+	],
+	"exportall.config.exclude": [
+		".config.",
+		".d.",
+		"dist",
+		"src"
+	],
+	"exportall.config.semis": false,
+	"cSpell.words": ["nodownload", "payple", "VILIV"]
+}

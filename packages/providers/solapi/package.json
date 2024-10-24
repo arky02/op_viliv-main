@@ -1,0 +1,10 @@
+{
+	"name": "@providers/solapi",
+	"version": "1.0.0",
+	"private": true,
+	"main": "./src/index.ts",
+	"license": "MIT",
+	"dependencies": {
+		"solapi": "^5.3.1"
+	}
+}

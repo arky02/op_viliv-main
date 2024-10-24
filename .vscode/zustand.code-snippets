@@ -1,0 +1,76 @@
+{
+	// 전역 상태관리 스토어 생성
+	"create new zustand store": {
+		"prefix": "cnzs",
+		"body": [
+			"import { create } from 'zustand'",
+			"",
+			"interface $1State {",
+			"\t${2:value}: string",
+			"\tform: {",
+			"\t\tname: string",
+			"\t\temail: string",
+			"\t}",
+			"}",
+			"",
+			"interface $1Store extends $1State {",
+			"\tsetValue: (${2:value}: string) => void",
+			"\tsetForm: (data: {}) => void",
+			"}",
+			"",
+			"const use$1Store = create<$1Store>((set) => ({",
+			"\t${2:value}: '',",
+			"\tform: {",
+			"\t\tname: '',",
+			"\t\temail: ''",
+			"\t},",
+			"\tsetValue: (${2:value}) => {",
+			"\t\tset({ ${2:value} })",
+			"\t},",
+			"\tsetForm(data) {",
+			"\t\tset((state) => ({",
+			"\t\t\tform: {",
+			"\t\t\t\t...state.form,",
+			"\t\t\t\t...data",
+			"\t\t\t}",
+			"\t\t}))",
+			"\t}",
+			"}));",
+			"",
+			"export { use$1Store };"
+		],
+
+		"description": "create new zustand store"
+	},
+
+	// 다이얼로그 오픈 상태 관리
+	"create dialog store": {
+		"prefix": "cds",
+		"body": [
+			"import { create } from 'zustand'",
+			"",
+			"interface $1DialogOpenState {",
+			"\t$1dialogOpened: boolean",
+			"}",
+			"",
+			"interface $1DialogOpenStore extends $1DialogOpenState {",
+			"\ttoggleDialog: (dialogName: keyof $1DialogOpenState) => void",
+			"}",
+			"",
+			"const use$2DialogOpenStore = create<$1DialogOpenStore>(",
+			"\t(set) => ({",
+			"\t\t$1dialogOpened: false,",
+			"\t\ttoggleDialog(dialogName) {",
+			"\t\t\tset((state) => ({",
+			"\t\t\t\t...state,",
+			"\t\t\t\t[dialogName]: !state[dialogName]",
+			"\t\t\t}))",
+			"\t\t}",
+			"\t})",
+			")",
+			"",
+			"export { use$2DialogOpenStore }"
+		],
+		"description": "create dialog store"
+	}
+}

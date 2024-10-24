@@ -1,0 +1,10 @@
+{
+	"extends": "@configs/typescript/base.json",
+	"paths": {
+		"@configs/*": ["configs/*"]
+	},
+	"include": ["packages/**/*", "configs/**/*"],
+	"compilerOptions": {
+		"typeRoots": ["./node_modules/@types"]
+	}
+}

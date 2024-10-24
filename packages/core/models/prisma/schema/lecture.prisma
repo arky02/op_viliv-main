@@ -1,0 +1,89 @@
+model Lecture {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  date           DateTime @db.Date()
+  name           String
+  description    String?
+  academyClassId String   @map("academy_class_id")
+  videoUrl       String   @map("video_url")
+  thumbnailUrl   String?  @map("thumbnail_url")
+
+  status         LectureStatus
+  academyMembers AcademyMember[]
+
+  academyClass    AcademyClass     @relation(fields: [academyClassId], references: [id])
+  analyzedLecture AnalyzedLecture?
+
+  @@map("lecture")
+}
+
+model AnalyzedLecture {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  lectureId String  @unique @map("lecture_id")
+  lecture   Lecture @relation(fields: [lectureId], references: [id], onDelete: Cascade)
+
+  segments          Segment[]
+  questions         Question[]
+  fullSummarization FullSummarization?
+
+  @@map("analyzed_lecture")
+}
+
+model Segment {
+  id            String   @id @default(cuid())
+  title         String
+  timeStamp     Int      @map("time_stamp")
+  summarization String[]
+
+  analyzedLectureId  String              @map("analyzed_lecture_id")
+  analyzedLecture    AnalyzedLecture     @relation(fields: [analyzedLectureId], references: [id], onDelete: Cascade)
+  textWithTimestamps TextWithTimestamp[]
+  frames             Frame[]
+
+  @@map("segment")
+}
+
+model TextWithTimestamp {
+  id        String @id @default(cuid())
+  timeStamp Int    @map("time_stamp")
+  text      String
+
+  segmentId String  @map("segment_id")
+  segment   Segment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+
+  @@map("text_with_timestamp")
+}
+
+model Question {
+  id                String          @id @default(cuid())
+  question          String
+  answer            String
+  analyzedLectureId String          @map("analyzed_lecture_id")
+  analyzedLecture   AnalyzedLecture @relation(fields: [analyzedLectureId], references: [id], onDelete: Cascade)
+
+  @@map("question")
+}
+
+model Frame {
+  id          String  @id @default(cuid())
+  frame       String
+  isThumbnail Boolean @default(false) @map("is_thumbnail")
+
+  segmentId String  @map("segment_id")
+  segment   Segment @relation(fields: [segmentId], references: [id], onDelete: Cascade) // Frame이 각 Segment와 연결됨
+
+  @@map("frame")
+}
+
+model FullSummarization {
+  id                String          @id @default(cuid())
+  summarization     String
+  analyzedLectureId String          @unique @map("analyzed_lecture_id")
+  analyzedLecture   AnalyzedLecture @relation(fields: [analyzedLectureId], references: [id], onDelete: Cascade)
+
+  @@map("full_summarization")
+}

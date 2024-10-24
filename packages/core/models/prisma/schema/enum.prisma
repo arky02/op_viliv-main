@@ -1,0 +1,27 @@
+enum LectureStatus {
+  PENDING
+  ONREVIEW
+  FAILED
+  OPENED
+  CLOSED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+enum AcademyMemberRole {
+  OWNER
+  MANAGER
+  TEACHER
+}
+
+enum SubscribePlan {
+  FREE
+  LIGHT
+  STANDARD
+  PRO
+  ENTERPRISE
+}

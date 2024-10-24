@@ -1,0 +1,11 @@
+{
+	"name": "@configs/next",
+	"version": "1.0.0",
+	"private": true,
+	"main": "next-config.js",
+	"types": "next-config.d.ts",
+	"devDependencies": {
+		"@prisma/nextjs-monorepo-workaround-plugin": "^5.15.0",
+		"terser-webpack-plugin": "^5.3.10"
+	}
+}
