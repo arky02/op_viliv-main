@@ -8,13 +8,13 @@ import { Icon } from '@design-system/icon'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
-import { generatePDF } from '@/app/pdf/action'
 import { convertToTimeFormatNumber } from '@/lib/util/conver-to-time-format-number'
 import { TimestampAccordion } from './timestamp-accordion'
 import { LectureInfo } from './lecture-info'
 
 interface LectureDetailAreaProps {
 	lecture: GetLectureInfo
+	type: 'default' | 'person_removed' | 'white_ver_dir'
 }
 
 interface Frame {
@@ -23,16 +23,11 @@ interface Frame {
 }
 
 export function LectureDetailArea({
-	lecture
+	lecture,
+	type
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
-
-	// const sortedSegments = [...segments].sort((a, b) => {
-	// 	const timeA = parseInt(a.timeStamp, 10)
-	// 	const timeB = parseInt(b.timeStamp, 10)
-	// 	return timeA - timeB
-	// })
 
 	const calculateSegmentDuration = (
 		textWithTimestamps: { timeStamp: number }[]
@@ -64,7 +59,7 @@ export function LectureDetailArea({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${lecture.id}`
+		const url = `${window.location.origin}/pdf/${lecture.id}?type=${type}`
 		console.log(url)
 		await downloadPDF(url)
 	}
@@ -95,16 +90,6 @@ export function LectureDetailArea({
 				>
 					PDF 확인하기
 				</Button>
-				{/* <Button
-					onClick={async () => {
-						await generatePDF(
-							`${window.location.origin}/pdf/${lecture.id}`,
-							'out.pdf'
-						)
-					}}
-				>
-					LocalTest
-				</Button> */}
 			</div>
 
 			<div className="max-pc:flex-col pc:mx-[120px] pc:mt-10 mx-4 flex gap-5">
@@ -142,7 +127,20 @@ export function LectureDetailArea({
 						)
 
 						if (thumbnailFrames.length > 0) {
-							framesToDisplay = thumbnailFrames
+							framesToDisplay = thumbnailFrames.map(
+								(frame: Frame) => {
+									const splitFrame = frame.frame.split('/')
+									const thumbnailNo = splitFrame.pop()
+									const currThumbnailBaseUrl = splitFrame
+										.slice(0, -1)
+										.join('/')
+
+									return {
+										...frame,
+										frame: `${currThumbnailBaseUrl}${type === 'default' ? '' : `/${type}`}/${thumbnailNo}`
+									}
+								}
+							)
 						} else if (segment.frames.length > 0) {
 							framesToDisplay = [
 								segment.frames[0] || {
@@ -183,15 +181,17 @@ export function LectureDetailArea({
 									</div>
 								</div>
 								{framesToDisplay.length > 0 ? (
-									framesToDisplay.map((frame, idx) => (
-										<Image
-											key={idx}
-											src={`https://${frame.frame}`}
-											alt={segment.title}
-											width={640}
-											height={360}
-										/>
-									))
+									framesToDisplay.map((frame, idx) => {
+										return (
+											<Image
+												key={idx}
+												src={`https://${frame.frame}`}
+												alt={segment.title}
+												width={640}
+												height={360}
+											/>
+										)
+									})
 								) : (
 									<Image
 										src={defaultImage}

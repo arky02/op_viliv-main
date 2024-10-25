@@ -9,6 +9,7 @@ import { A4Layer } from './a4-layer'
 
 interface PDFAreaProps {
 	lecture: GetLectureInfo
+	type: 'default' | 'person_removed' | 'white_ver_dir'
 }
 
 function formatTimestamp(ms: number): string {
@@ -19,7 +20,7 @@ function formatTimestamp(ms: number): string {
 	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-export function PDFArea({ lecture }: PDFAreaProps) {
+export function PDFArea({ lecture, type }: PDFAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [], questions = [] } =
 		analyzedLecture || {}
@@ -85,13 +86,25 @@ export function PDFArea({ lecture }: PDFAreaProps) {
 						sortedTextWithTimestamps.length - 1
 					]?.timeStamp
 
-				const thumbnailFrames = segment.frames.filter(
+				let thumbnailFrames = segment.frames.filter(
 					(frame) => frame.isThumbnail
 				)
-				const framesToDisplay =
-					thumbnailFrames.length > 0
-						? thumbnailFrames
-						: [segment.frames[0]]
+
+				if (thumbnailFrames.length <= 0 && segment.frames[0])
+					thumbnailFrames = [segment.frames[0]]
+
+				const framesToDisplay = thumbnailFrames.map((frame) => {
+					const splitFrame = frame.frame.split('/')
+					const thumbnailNo = splitFrame.pop()
+					const currThumbnailBaseUrl = splitFrame
+						.slice(0, -1)
+						.join('/')
+
+					return {
+						...frame,
+						frame: `${currThumbnailBaseUrl}${type === 'default' ? '' : `/${type}`}/${thumbnailNo}`
+					}
+				})
 
 				return (
 					<A4Layer key={segment.id}>

@@ -19,11 +19,13 @@ interface LectureDetailHeaderProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
+	type: 'default' | 'person_removed' | 'white_ver_dir'
 }
 
 export function LectureDetailHeader({
 	params,
-	lecture
+	lecture,
+	type
 }: LectureDetailHeaderProps) {
 	const router = useRouter()
 	const goBack = () => {
@@ -31,8 +33,7 @@ export function LectureDetailHeader({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${params.lectureId}`
-		console.log(url)
+		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${type}`
 		await downloadPDF(url)
 	}
 
@@ -59,11 +60,11 @@ export function LectureDetailHeader({
 					</div>
 					<div className="flex gap-4 whitespace-nowrap">
 						<Select
-							onValueChange={(type) => {
+							onValueChange={(selectedType) => {
 								const currentUrl =
 									window.location.href.split('?')[0]
 
-								router.push(`${currentUrl}?type=${type}`)
+								router.push(`${currentUrl}?type=${selectedType}`)
 							}}
 						>
 							<SelectTrigger className="w-fit">
