@@ -73,7 +73,7 @@ export function LectureDetailArea({
 
 	const handleDownloadPDF = async () => {
 		const url = `${window.location.origin}/pdf/${lecture.id}`
-		console.log(url)
+
 		await downloadPDF(url)
 	}
 
