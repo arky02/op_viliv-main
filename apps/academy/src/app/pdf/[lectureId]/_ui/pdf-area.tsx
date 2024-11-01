@@ -114,7 +114,7 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 							const imgNo =
 								frameUrlWithInfos[frameUrlWithInfos.length - 1]
 
-							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}/${type}/${imgNo}`
+							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}/${type === 'default' ? '' : `/${type}`}/${imgNo}`
 
 							return {
 								...frame,
