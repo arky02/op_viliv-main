@@ -14,6 +14,7 @@ import { TimestampAccordion } from './timestamp-accordion'
 import { SummaryEditModal } from './summary-edit-modal'
 import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
+import { LectureImgTypeSelect } from './lecture-img-type-select'
 
 interface Frame {
 	frame: string
@@ -27,20 +28,16 @@ interface LectureDetailAreaProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
+	type: 'default' | 'person_removed' | 'white_ver_dir'
 }
 
 export function LectureDetailArea({
 	params,
-	lecture
+	lecture,
+	type
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
-
-	// const sortedSegments = [...segments].sort((a, b) => {
-	// 	const timeA = parseInt(a.timeStamp, 10)
-	// 	const timeB = parseInt(b.timeStamp, 10)
-	// 	return timeA - timeB
-	// })
 
 	const calculateSegmentDuration = (
 		textWithTimestamps: { timeStamp: number }[]
@@ -72,7 +69,7 @@ export function LectureDetailArea({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${lecture.id}`
+		const url = `${window.location.origin}/pdf/${lecture.id}?type=${type}`
 
 		await downloadPDF(url)
 	}
@@ -91,8 +88,9 @@ export function LectureDetailArea({
 			>
 				<track kind="captions" label="Korean" />
 			</video>
-			<div className="pc:hidden p-4">
+			<div className="pc:hidden flex items-end p-4">
 				<LectureInfo lecture={lecture} />
+				<LectureImgTypeSelect size="sm" />
 			</div>
 
 			<div className="pc:hidden bg-background fixed bottom-0 left-0 z-20 w-full px-4 py-2">
@@ -142,14 +140,16 @@ export function LectureDetailArea({
 						)
 
 						let framesToDisplay: Frame[] = []
-						const thumbnailFrames = segment.frames.filter(
+						let thumbnailFrames = segment.frames.filter(
 							(frame: Frame) => frame.isThumbnail
 						)
 
-						if (thumbnailFrames.length > 0) {
-							framesToDisplay = thumbnailFrames
-						} else if (segment.frames.length > 0) {
-							framesToDisplay = [
+						// 썸네일 이미지 종류 기본값 설정 X
+						if (thumbnailFrames.length <= 0) {
+							if (segment.frames.length <= 0) return
+
+							// 썸네일 이미지가 없을 경우 첫 번째 이미지를 썸네일로 설정
+							thumbnailFrames = [
 								segment.frames[0] || {
 									id: '',
 									frame: '',
@@ -158,6 +158,21 @@ export function LectureDetailArea({
 								}
 							]
 						}
+
+						framesToDisplay = thumbnailFrames.map(
+							(frame: Frame) => {
+								const splitFrame = frame.frame.split('/')
+								const thumbnailNo = splitFrame.pop()
+								const currThumbnailBaseUrl = splitFrame
+									.slice(0, -1)
+									.join('/')
+
+								return {
+									...frame,
+									frame: `${currThumbnailBaseUrl}${type === 'default' ? '' : `/${type}`}/${thumbnailNo}`
+								}
+							}
+						)
 
 						return (
 							<div

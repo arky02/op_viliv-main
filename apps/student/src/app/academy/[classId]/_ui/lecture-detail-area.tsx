@@ -11,6 +11,7 @@ import { downloadPDF } from '@/hook/download-pdf'
 import { convertToTimeFormatNumber } from '@/lib/util/conver-to-time-format-number'
 import { TimestampAccordion } from './timestamp-accordion'
 import { LectureInfo } from './lecture-info'
+import { LectureImgTypeSelect } from './lecture-img-type-select'
 
 interface LectureDetailAreaProps {
 	lecture: GetLectureInfo
@@ -78,8 +79,9 @@ export function LectureDetailArea({
 			>
 				<track kind="captions" label="Korean" />
 			</video>
-			<div className="pc:hidden p-4">
+			<div className="pc:hidden flex items-center p-4">
 				<LectureInfo lecture={lecture} />
+				<LectureImgTypeSelect size="sm" />
 			</div>
 
 			<div className="pc:hidden bg-background fixed bottom-0 left-0 z-20 w-full px-4 py-2">
@@ -122,27 +124,16 @@ export function LectureDetailArea({
 						)
 
 						let framesToDisplay: Frame[] = []
-						const thumbnailFrames = segment.frames.filter(
+						let thumbnailFrames = segment.frames.filter(
 							(frame: Frame) => frame.isThumbnail
 						)
 
-						if (thumbnailFrames.length > 0) {
-							framesToDisplay = thumbnailFrames.map(
-								(frame: Frame) => {
-									const splitFrame = frame.frame.split('/')
-									const thumbnailNo = splitFrame.pop()
-									const currThumbnailBaseUrl = splitFrame
-										.slice(0, -1)
-										.join('/')
+						// 썸네일 이미지 종류 기본값 설정 X
+						if (thumbnailFrames.length <= 0) {
+							if (segment.frames.length <= 0) return
 
-									return {
-										...frame,
-										frame: `${currThumbnailBaseUrl}${type === 'default' ? '' : `/${type}`}/${thumbnailNo}`
-									}
-								}
-							)
-						} else if (segment.frames.length > 0) {
-							framesToDisplay = [
+							// 썸네일 이미지가 없을 경우 첫 번째 이미지를 썸네일로 설정
+							thumbnailFrames = [
 								segment.frames[0] || {
 									id: '',
 									frame: '',
@@ -151,6 +142,21 @@ export function LectureDetailArea({
 								}
 							]
 						}
+
+						framesToDisplay = thumbnailFrames.map(
+							(frame: Frame) => {
+								const splitFrame = frame.frame.split('/')
+								const thumbnailNo = splitFrame.pop()
+								const currThumbnailBaseUrl = splitFrame
+									.slice(0, -1)
+									.join('/')
+
+								return {
+									...frame,
+									frame: `${currThumbnailBaseUrl}${type === 'default' ? '' : `/${type}`}/${thumbnailNo}`
+								}
+							}
+						)
 
 						return (
 							<div
