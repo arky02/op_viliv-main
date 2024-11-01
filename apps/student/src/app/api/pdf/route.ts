@@ -33,6 +33,7 @@ export async function POST(req: Request) {
 			headless: true,
 			ignoreHTTPSErrors: true
 		})
+		console.log("browser",browser)
 		const page = await browser.newPage()
 
 		await page.goto(url, { waitUntil: 'networkidle2' })
@@ -66,7 +67,7 @@ export async function POST(req: Request) {
 	} catch (error) {
 		console.error('PDF 생성 실패:', error)
 		return new Response(
-			JSON.stringify({ error: 'Failed to generate PDF' }),
+			JSON.stringify({ error: 'Failed to generate PDF', detail: error }),
 			{
 				status: 500,
 				headers: { 'Content-Type': 'application/json' }
