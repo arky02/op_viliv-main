@@ -21,7 +21,7 @@ export default async function LectureDetailPage({
 		params.lectureId
 	)
 
-	const { type = 'default' } = searchParams // 쿼리 파라미터로부터 썸네일 이미지 type 가져오기, 기본값은 'default'
+	const { type } = searchParams // 쿼리 파라미터로부터 썸네일 이미지 type 가져오기, 기본값은 'default'
 
 	return (
 		<div className="max-pc:bg-background">
