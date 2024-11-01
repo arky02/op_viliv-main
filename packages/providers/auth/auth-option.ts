@@ -49,6 +49,13 @@ const authOptions: NextAuthConfig = {
 		strategy: 'jwt'
 	},
 	callbacks: {
+		// TEST
+		async redirect({ url, baseUrl }) {
+			// 개발 환경에서는 localhost로 리다이렉트, 프로덕션에서는 배포된 URL로 리다이렉트
+			return process.env.NODE_ENV === 'development'
+				? 'http://localhost:3000'
+				: baseUrl
+		},
 		session: async ({ session, token }) => {
 			if (!session?.user) session
 
