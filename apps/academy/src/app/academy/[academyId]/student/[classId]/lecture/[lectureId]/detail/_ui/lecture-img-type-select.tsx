@@ -27,14 +27,19 @@ export function LectureImgTypeSelect({
 	return (
 		<Select onValueChange={handleImgTypeSelect}>
 			<SelectTrigger
-				className={`h-fit w-fit text-[${size === 'sm' ? '14' : '16'}px]`}
+				className="h-fit w-fit"
+				style={{ fontSize: `${size === 'sm' ? '14' : '16'}px` }}
 			>
 				<SelectValue
-					placeholder={`강의 이미지 ${size === 'sm' ? '' : '종류'} 설정`}
+					placeholder={
+						size === 'sm'
+							? '이미지 타입'
+							: '강의 이미지 타입 설정'
+					}
 				/>
 			</SelectTrigger>
 			<SelectContent
-				className={`text-[${size === 'sm' ? '14' : '16'}px]`}
+				style={{ fontSize: `${size === 'sm' ? '14' : '16'}px` }}
 			>
 				<SelectItem value="default">원본 이미지</SelectItem>
 				<SelectItem value="person_removed">
