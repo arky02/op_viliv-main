@@ -16,6 +16,8 @@ import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
 
+const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
+
 interface Frame {
 	frame: string
 	isThumbnail: boolean
@@ -28,7 +30,11 @@ interface LectureDetailAreaProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
-	type: 'default' | 'person_removed' | 'white_ver_dir'
+	type:
+		| undefined
+		| 'default'
+		| 'person_removed'
+		| 'white_ver_dir'
 }
 
 export function LectureDetailArea({
@@ -69,7 +75,7 @@ export function LectureDetailArea({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${lecture.id}?type=${type}`
+		const url = `${window.location.origin}/pdf/${lecture.id}${type ? `?type=${type}` : ''}`
 
 		await downloadPDF(url)
 	}
@@ -140,16 +146,15 @@ export function LectureDetailArea({
 						)
 
 						let framesToDisplay: Frame[] = []
-						let thumbnailFrames = segment.frames.filter(
+						const thumbnailFrames = segment.frames.filter(
 							(frame: Frame) => frame.isThumbnail
 						)
 
-						// 썸네일 이미지 종류 기본값 설정 X
-						if (thumbnailFrames.length <= 0) {
-							if (segment.frames.length <= 0) return
-
+						if (thumbnailFrames.length > 0) {
+							framesToDisplay = thumbnailFrames
+						} else if (segment.frames.length > 0) {
 							// 썸네일 이미지가 없을 경우 첫 번째 이미지를 썸네일로 설정
-							thumbnailFrames = [
+							framesToDisplay = [
 								segment.frames[0] || {
 									id: '',
 									frame: '',
@@ -159,20 +164,30 @@ export function LectureDetailArea({
 							]
 						}
 
-						framesToDisplay = thumbnailFrames.map(
-							(frame: Frame) => {
-								const splitFrame = frame.frame.split('/')
-								const thumbnailNo = splitFrame.pop()
-								const currThumbnailBaseUrl = splitFrame
-									.slice(0, -1)
-									.join('/')
+						if (type) {
+							framesToDisplay = framesToDisplay.map(
+								(frame: Frame) => {
+									//thumbnailFrames.length > 0 : viliv.ngrok.dev/api/frames//cm2a4uoo2000113rj6bsjvxql/white_ver_dir/225.jpg
+									//thumbnailFrames.length <= 0 : viliv.ngrok.dev/api/frames/cm2a4l64d00012101y6xqkoe6/1695.jpg
 
-								return {
-									...frame,
-									frame: `${currThumbnailBaseUrl}${type === 'default' ? '' : `/${type}`}/${thumbnailNo}`
+									const frameUrlWithInfos = frame.frame
+										.replace('//', '/')
+										.replace(THUMBNAIL_IMG_BASE_URL, '')
+										.split('/')
+
+									const frameId = frameUrlWithInfos[0]
+									const imgNo =
+										frameUrlWithInfos[frameUrlWithInfos.length - 1]
+
+									const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}/${type}/${imgNo}`
+
+									return {
+										...frame,
+										frame: thumbnailUrlToDisplay
+									}
 								}
-							}
-						)
+							)
+						}
 
 						return (
 							<div

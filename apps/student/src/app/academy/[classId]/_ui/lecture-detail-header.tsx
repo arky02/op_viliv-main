@@ -13,7 +13,11 @@ interface LectureDetailHeaderProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
-	type: 'default' | 'person_removed' | 'white_ver_dir'
+	type:
+		| 'default'
+		| 'person_removed'
+		| 'white_ver_dir'
+		| undefined
 }
 
 export function LectureDetailHeader({
@@ -27,7 +31,7 @@ export function LectureDetailHeader({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${type}`
+		const url = `${window.location.origin}/pdf/${params.lectureId}${type ? `?type=${type}` : ''}`
 		await downloadPDF(url)
 	}
 

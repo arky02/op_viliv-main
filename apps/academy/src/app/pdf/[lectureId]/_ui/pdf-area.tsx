@@ -7,8 +7,15 @@ import { type GetLectureInfo } from '@/module/lecture/model'
 import { formatDate } from '@/lib/util/format-date'
 import { A4Layer } from './a4-layer'
 
+const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
+
 interface PDFAreaProps {
 	lecture: GetLectureInfo
+	type:
+		| 'default'
+		| 'person_removed'
+		| 'white_ver_dir'
+		| undefined
 }
 
 function formatTimestamp(ms: number): string {
@@ -19,7 +26,7 @@ function formatTimestamp(ms: number): string {
 	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-export function PDFArea({ lecture }: PDFAreaProps) {
+export function PDFArea({ lecture, type }: PDFAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [], questions = [] } =
 		analyzedLecture || {}
@@ -88,10 +95,32 @@ export function PDFArea({ lecture }: PDFAreaProps) {
 				const thumbnailFrames = segment.frames.filter(
 					(frame) => frame.isThumbnail
 				)
-				const framesToDisplay =
+				const finedThumbnailFrames =
 					thumbnailFrames.length > 0
 						? thumbnailFrames
 						: [segment.frames[0]]
+
+				const framesToDisplay = !type
+					? finedThumbnailFrames
+					: finedThumbnailFrames.map((frame) => {
+							if (!frame) return frame
+
+							const frameUrlWithInfos = frame.frame
+								.replace('//', '/')
+								.replace(THUMBNAIL_IMG_BASE_URL, '')
+								.split('/')
+
+							const frameId = frameUrlWithInfos[0]
+							const imgNo =
+								frameUrlWithInfos[frameUrlWithInfos.length - 1]
+
+							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}/${type}/${imgNo}`
+
+							return {
+								...frame,
+								frame: thumbnailUrlToDisplay
+							}
+						})
 
 				return (
 					<A4Layer key={segment.id}>

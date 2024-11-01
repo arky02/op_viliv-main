@@ -14,7 +14,7 @@ export default async function LecturePDFPage({
 	params,
 	searchParams
 }: LecturePDFPageProps) {
-	const { type = 'default' } = searchParams
+	const { type } = searchParams
 
 	const lecture = await lectureService.getLectureInfo(
 		params.lectureId
