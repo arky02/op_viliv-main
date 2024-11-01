@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
 import { LectureInfo } from './lecture-info'
+import { LectureImgTypeSelect } from './lecture-img-type-select'
 
 interface LectureDetailHeaderProps {
 	params: {
@@ -20,11 +21,13 @@ interface LectureDetailHeaderProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
+	type: 'default' | 'person_removed' | 'white_ver_dir'
 }
 
 export function LectureDetailHeader({
 	params,
-	lecture
+	lecture,
+	type
 }: LectureDetailHeaderProps) {
 	const router = useRouter()
 	const goBack = () => {
@@ -32,7 +35,7 @@ export function LectureDetailHeader({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${params.lectureId}`
+		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${type}`
 		await downloadPDF(url)
 	}
 
@@ -71,8 +74,8 @@ export function LectureDetailHeader({
 					</DropdownMenu>
 				</div>
 			</div>
-			<div className="bg-background pc:px-[120px] pc:py-8 pc:border-b flex flex-col gap-6 p-4">
-				<div className="max-pc:hidden flex items-center gap-[5px]">
+			<div className="max-pc:hidden bg-background pc:px-[120px] pc:py-8 pc:border-b flex flex-col gap-6 p-4">
+				<div className="flex items-center gap-[5px]">
 					<Icon
 						name="ArrowLeftLine"
 						onClick={goBack}
@@ -82,40 +85,37 @@ export function LectureDetailHeader({
 					<div className="text-base font-semibold">돌아가기</div>
 				</div>
 				<div className="flex justify-between">
-					<div className="max-pc:hidden">
-						<LectureInfo lecture={lecture} />
-					</div>
+					<LectureInfo lecture={lecture} />
 					<div className="flex items-center gap-4">
+						<LectureImgTypeSelect />
 						<Button
 							variant="secondary"
-							className="max-pc:hidden"
+							className=""
 							onClick={handleDownloadPDF}
 						>
 							PDF 확인하기
 						</Button>
-						<div className="max-pc:hidden">
-							<DropdownMenu>
-								<DropdownMenuTrigger className="mb-auto ml-auto">
-									<Icon
-										name="More2Fill"
-										size={28}
-										className="text-secondary-foreground"
-										onClick={(e) => e.stopPropagation()}
-									/>
-								</DropdownMenuTrigger>
-								<DropdownMenuContent className="w-[172px]">
-									<DropdownMenuItem
-										onClick={(e) => {
-											e.preventDefault()
-											e.stopPropagation()
-											handleEditClick()
-										}}
-									>
-										수정하기
-									</DropdownMenuItem>
-								</DropdownMenuContent>
-							</DropdownMenu>
-						</div>
+						<DropdownMenu>
+							<DropdownMenuTrigger className="mb-auto ml-auto">
+								<Icon
+									name="More2Fill"
+									size={28}
+									className="text-secondary-foreground"
+									onClick={(e) => e.stopPropagation()}
+								/>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent className="w-[172px]">
+								<DropdownMenuItem
+									onClick={(e) => {
+										e.preventDefault()
+										e.stopPropagation()
+										handleEditClick()
+									}}
+								>
+									수정하기
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</div>
 				</div>
 			</div>
