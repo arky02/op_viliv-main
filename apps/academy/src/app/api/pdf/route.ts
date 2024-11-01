@@ -6,8 +6,6 @@ export async function POST(req: Request) {
 	const chromium = require('@sparticuz/chromium')
 	const puppeteer = require('puppeteer-core')
 
-	console.log(url)
-
 	if (!url) {
 		return new Response(
 			JSON.stringify({ error: 'URL is required' }),
