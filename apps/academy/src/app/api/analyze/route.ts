@@ -2,14 +2,17 @@
 import { db } from '@core/models'
 import { NextResponse } from 'next/server'
 
+//TODO
 export async function POST(request: Request) {
 	try {
 		const json = await request.json()
 		console.log('Webhook payload: ', json)
 
-		const { segments, questions, full_summerization, error } =
+		const { segments, questions, full_summerization, thumbnails_id, error } =
 			json
 		const lectureId = json.lecture_id
+
+		console.log("json",json)
 
 		console.log('frames payload: ', segments[0].frames)
 
@@ -53,9 +56,12 @@ export async function POST(request: Request) {
 			}
 		})
 
+		console.log('thumbnails_id', thumbnails_id)
+
 		const analyzedLecture = await db.analyzedLecture.create({
 			data: {
-				lectureId
+				lectureId,
+				thumbnailsId: thumbnails_id
 			}
 		})
 
@@ -67,7 +73,8 @@ export async function POST(request: Request) {
 							time_stamp,
 							summarization,
 							text_with_timestamp,
-							frames
+							frames,
+							frames_id
 						} = segment
 
 						if (frames && frames.length > 0) {
@@ -78,11 +85,13 @@ export async function POST(request: Request) {
 									summarization,
 									frames: {
 										createMany: {
-											data: frames.map((frame: string) => ({
-												frame
-											}))
-										}
+											data: frames.map((frame: string, index: number) => ({
+												frame,
+												frameId: frames_id[index],  // 여기서 frames_id를 매칭해줌
+											})),
+										},
 									},
+									framesId: frames_id,
 									textWithTimestamps: {
 										createMany: {
 											data: text_with_timestamp.map(
@@ -103,6 +112,9 @@ export async function POST(request: Request) {
 						return null
 					})
 				: []
+
+		console.log("segmentPromises",segmentPromises)
+		console.log("segments",segments)
 
 		const questionPromises =
 			questions && Array.isArray(questions)
