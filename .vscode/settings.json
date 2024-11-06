@@ -1,48 +1,80 @@
 {
-	"eslint.workingDirectories": [
-		{
-			"mode": "auto"
-		}
-	],
-	"tailwindCSS.classAttributes": [
-		"class",
-		"className",
-		"classNames",
-		"ngClass",
-		".*Class"
-	],
-	"tailwindCSS.experimental.classRegex": [
-		["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-		["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-	],
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
-	"editor.quickSuggestions": {
-		"strings": "on"
-	},
-	"editor.defaultFormatter": "esbenp.prettier-vscode",
-	"editor.tabSize": 2,
-	"editor.formatOnSave": true,
-	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "always",
-		"source.fixAll.prettier": "always"
-	},
-	"[prisma]": {
-		"editor.defaultFormatter": "Prisma.prisma"
-	},
-	"exportall.config.folderListener": [
-		"/apps/main/src/components",
-		"/apps/main/src/components/**",
-		"/apps/main/src/lib",
-		"/packages/core/models"
-	],
-	"exportall.config.exclude": [
-		".config.",
-		".d.",
-		"dist",
-		"src"
-	],
-	"exportall.config.semis": false,
-	"cSpell.words": ["nodownload", "payple", "VILIV"]
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "cSpell.words": [
+    "nodownload",
+    "payple",
+    "VILIV"
+  ],
+  "deno.enablePaths": [
+    "supabase/functions"
+  ],
+  "deno.lint": true,
+  "deno.unstable": [
+    "bare-node-builtins",
+    "byonm",
+    "sloppy-imports",
+    "unsafe-proto",
+    "webgpu",
+    "broadcast-channel",
+    "worker-options",
+    "cron",
+    "kv",
+    "ffi",
+    "fs",
+    "http",
+    "net"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.fixAll.prettier": "always"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "editor.tabSize": 2,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "exportall.config.exclude": [
+    ".config.",
+    ".d.",
+    "dist",
+    "src"
+  ],
+  "exportall.config.folderListener": [
+    "/apps/main/src/components",
+    "/apps/main/src/components/**",
+    "/apps/main/src/lib",
+    "/packages/core/models"
+  ],
+  "exportall.config.semis": false,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "classNames",
+    "ngClass",
+    ".*Class"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "cva\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ],
+    [
+      "cx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
+  ]
 }
