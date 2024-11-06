@@ -38,11 +38,13 @@ export const getLectureInfoInclude = {
 							timeStamp: 'asc'
 						}
 					},
-					frames: true
+					frames: true,
+					framesId: true
 				}
 			},
 			questions: true,
-			fullSummarization: true
+			fullSummarization: true,
+			thumbnailsId: true
 		}
 	},
 	academyMembers: {
