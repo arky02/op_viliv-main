@@ -42,7 +42,7 @@ export function LectureDetailArea({
 	lecture,
 	type
 }: LectureDetailAreaProps) {
-	const { analyzedLecture } = lecture
+	const { analyzedLecture } = lecture //Result
 	const { segments = [] } = analyzedLecture || {}
 
 	const calculateSegmentDuration = (
