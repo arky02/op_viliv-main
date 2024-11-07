@@ -27,8 +27,8 @@ class AiService {
 
 	async analyzeVideo(videoUrl: string, lectureId: string) {
 		const { access_token } = await this.getAuthToken()
-		const webhookUrl = `${window.location.origin}/api/analyze`;
-
+		const webhookUrl = `https://viliv-academy.vercel.app/api/analyze`;
+		
 		console.log('analyzeVideo - Access token: ', access_token)
 
 		const body = new URLSearchParams()
@@ -47,6 +47,9 @@ class AiService {
 			'.Ov^z$/BnoK3ijTTbk21`E>_=^]]Wl'
 		)
 
+
+		console.log("analyzeVideo - req body: ",body)
+		console.log("analyzeVideo - req headers: ",headers)
 		const res = await fetch(`${this.host}/api/analyze`, {
 			// mode: 'cors',
 			headers,
@@ -54,10 +57,9 @@ class AiService {
 			body
 			// cache: 'no-store'
 		}).catch((error) => {
-			console.error('Error analyzing video:', error)
+			console.error('analyzeVideo - Error analyzing video:', error)
 		})
 
-		console.log(headers)
 
 		if (!res) {
 			throw new Error('비디오 분석 중 오류가 발생했습니다.')
