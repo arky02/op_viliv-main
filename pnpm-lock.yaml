@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@prisma/nextjs-monorepo-workaround-plugin':
+        specifier: ^5.15.0
+        version: 5.15.0
       dotenv-cli:
         specifier: ^7.3.0
         version: 7.4.2
@@ -3415,7 +3418,6 @@ packages:
 
   /@prisma/nextjs-monorepo-workaround-plugin@5.15.0:
     resolution: {integrity: sha512-aIrt8gkTIcZz+kNWV3MwnsHQfGOIoFRK8GsmPPIZWqinGSpPZ729fH7T1Jwlbo+YyUaVPgI1HCsBKRl1qn6d0g==}
-    dev: true
 
   /@puppeteer/browsers@2.3.1:
     resolution: {integrity: sha512-uK7o3hHkK+naEobMSJ+2ySYyXtQkBxIH8Gn4MK9ciePjNV+Pf+PgY/W7iPzn2MTjl3stcYB5AlcTmPYw7AXDwA==}
