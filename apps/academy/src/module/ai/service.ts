@@ -47,9 +47,6 @@ class AiService {
 			'.Ov^z$/BnoK3ijTTbk21`E>_=^]]Wl'
 		)
 
-		console.log('analyzeVideo - req headers: ', headers)
-		console.log('analyzeVideo - req body: ', body)
-
 		const res = await fetch(`${this.host}/api/analyze`, {
 			// mode: 'cors',
 			headers,
@@ -59,6 +56,9 @@ class AiService {
 		}).catch((error) => {
 			console.error('analyzeVideo - Error analyzing video:', error)
 		})
+
+		console.log("analyzeVideo - headers", headers)
+		console.log("analyzeVideo - body", body)
 
 		if (!res) {
 			throw new Error('비디오 분석 중 오류가 발생했습니다.')
