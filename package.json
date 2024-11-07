@@ -29,6 +29,7 @@
 		"@configs/prettier": "workspace:*",
 		"@configs/tailwindcss": "workspace:*",
 		"@configs/typescript": "workspace:*",
+		"@prisma/nextjs-monorepo-workaround-plugin": "^5.15.0",
 		"@swc/core": "^1.6.5",
 		"eslint": "^8.57.0",
 		"prettier": "^3.3.2",
