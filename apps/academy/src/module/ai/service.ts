@@ -54,7 +54,7 @@ class AiService {
 			body
 			// cache: 'no-store'
 		}).catch((error) => {
-			console.error('Error analyzing video:', error)
+			console.error('analyzeVideo - Error analyzing video:', error)
 		})
 
 		console.log("analyzeVideo - headers", headers)
