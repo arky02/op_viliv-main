@@ -98,12 +98,14 @@ export function LectureDetailEditArea({
 			})
 		)
 
+		// TODO: update segment
 		updateSegment.execute({
 			segmentId: segment.id,
 			title: segmentTitle,
 			summarization: summary,
 			textWithTimestamps: scripts,
-			frames: updatedFrames
+			frames: updatedFrames,
+			framesId: selectedFrames.join(',')
 		})
 	}
 
@@ -144,7 +146,7 @@ export function LectureDetailEditArea({
 				</div>
 			</div>
 			<div className="bg-background pc:px-[120px] pc:py-20 flex flex-col gap-10 p-4">
-				<div className="max-pc:hidden bg-background sticky top-0 flex h-fit items-center justify-between border-b py-4 z-20">
+				<div className="max-pc:hidden bg-background sticky top-0 z-20 flex h-fit items-center justify-between border-b py-4">
 					<div className="flex gap-3">
 						<Icon
 							name="ArrowLeftLine"

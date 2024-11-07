@@ -20,6 +20,7 @@ export const updateSegmentDto = z.object({
 			isThumbnail: z.boolean()
 		})
 	),
+	framesId: z.string(),
 	textWithTimestamps: z.array(
 		z.object({
 			id: z.string(),

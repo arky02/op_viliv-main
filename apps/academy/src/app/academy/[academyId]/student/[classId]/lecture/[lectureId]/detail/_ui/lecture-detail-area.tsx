@@ -158,7 +158,7 @@ export function LectureDetailArea({
 								segment.frames[0] || {
 									id: '',
 									frame: '',
-									frameId: 0,
+									frameId: '',
 									isThumbnail: false,
 									segmentId: ''
 								}
