@@ -58,8 +58,9 @@ export async function POST(request: Request) {
 			}
 		})
 
-		console.log('Webhook thumbnails_id', thumbnails_id)
-		console.log('Webhook thumbnails_id type', typeof thumbnails_id)
+		const thumbnailsIdStr = thumbnails_id.toString()
+		console.log('Webhook thumbnails_id', thumbnailsIdStr)
+		console.log('Webhook thumbnails_id type', typeof thumbnailsIdStr)
 
 		console.log('Webhook lectureId', lectureId)
 		console.log('Webhook lectureId type', typeof lectureId)
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
 		const analyzedLecture = await db.analyzedLecture.create({
 			data: {
 				lectureId,
-				thumbnailsId: thumbnails_id
+				thumbnailsId: thumbnailsIdStr
 			}
 		})
 
@@ -98,11 +99,11 @@ export async function POST(request: Request) {
 										createMany: {
 											data: frames.map((frame: string, index: number) => ({
 												frame,
-												frameId: frames_id[index],  // 여기서 frames_id를 매칭해줌
+												frameId: frames_id[index].toString(),  // 여기서 frames_id를 매칭해줌
 											})),
 										},
 									},
-									framesId: frames_id,
+									framesId: frames_id.toString(),
 									textWithTimestamps: {
 										createMany: {
 											data: text_with_timestamp.map(
