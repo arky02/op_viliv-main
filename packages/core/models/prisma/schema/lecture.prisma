@@ -29,7 +29,7 @@ model AnalyzedLecture {
   segments          Segment[]
   questions         Question[]
   fullSummarization FullSummarization?
-  thumbnailsId      Int[]              @map("thumbnails_id") // V2_Added: newly added in v2
+  thumbnailsId      String              @map("thumbnails_id") // V2_Added: newly added in v2
 
   @@map("analyzed_lecture")
 }
@@ -44,7 +44,7 @@ model Segment {
   analyzedLecture    AnalyzedLecture     @relation(fields: [analyzedLectureId], references: [id], onDelete: Cascade)
   textWithTimestamps TextWithTimestamp[]
   frames             Frame[]
-  framesId           Int[]               @map("frames_id")   // V2_Added: newly added in v2
+  framesId           String               @map("frames_id")   // V2_Added: newly added in v2
 
   @@map("segment")
 }
@@ -73,7 +73,7 @@ model Question {
 model Frame {
   id          String  @id @default(cuid())
   frame       String
-  frameId     Int     @map("frame_id")    // V2_Added: newly added in v2
+  frameId     String     @map("frame_id")    // V2_Added: newly added in v2
   isThumbnail Boolean @default(false) @map("is_thumbnail")
 
   segmentId String  @map("segment_id")
