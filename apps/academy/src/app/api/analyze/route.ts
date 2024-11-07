@@ -59,6 +59,10 @@ export async function POST(request: Request) {
 		})
 
 		console.log('Webhook thumbnails_id', thumbnails_id)
+		console.log('Webhook thumbnails_id type', typeof thumbnails_id)
+
+		console.log('Webhook lectureId', lectureId)
+		console.log('Webhook lectureId type', typeof lectureId)
 
 		const analyzedLecture = await db.analyzedLecture.create({
 			data: {
@@ -66,6 +70,10 @@ export async function POST(request: Request) {
 				thumbnailsId: thumbnails_id
 			}
 		})
+
+		console.log('Webhook analyzedLecture', analyzedLecture)
+
+		console.log("Webhook segment",segments)
 
 		const segmentPromises =
 			segments && Array.isArray(segments)
@@ -78,6 +86,7 @@ export async function POST(request: Request) {
 							frames,
 							frames_id
 						} = segment
+
 
 						if (frames && frames.length > 0) {
 							return db.segment.create({
