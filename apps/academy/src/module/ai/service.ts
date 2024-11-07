@@ -28,7 +28,7 @@ class AiService {
 	async analyzeVideo(videoUrl: string, lectureId: string) {
 		const { access_token } = await this.getAuthToken()
 		const webhookUrl = `https://viliv-academy.vercel.app/api/analyze`;
-		
+
 		console.log('analyzeVideo - Access token: ', access_token)
 
 		const body = new URLSearchParams()
