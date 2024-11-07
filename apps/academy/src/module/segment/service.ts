@@ -7,7 +7,7 @@ class SegmentService {
 			where: { id },
 			include: {
 				textWithTimestamps: true,
-				frames: true
+				frames: true,
 			}
 		})
 		return segment
@@ -28,7 +28,7 @@ class SegmentService {
 						}
 					}))
 				},
-
+				framesId: dto.framesId,
 				frames: {
 					updateMany: dto.frames.map((item) => ({
 						where: { id: item.id },
