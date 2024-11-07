@@ -32,9 +32,9 @@ class AiService {
 		console.log('analyzeVideo - Access token: ', access_token)
 
 		const body = new URLSearchParams()
-		body.append('analyzeVideo - video_url: ', videoUrl)
-		body.append('analyzeVideo - webhook_url: ', webhookUrl)
-		body.append('analyzeVideo - lecture_id: ', lectureId)
+		body.append('video_url', videoUrl)
+		body.append('webhook_url', webhookUrl)
+		body.append('lecture_id', lectureId)
 
 		const headers = new Headers()
 		// headers.set('Authorization', `Bearer ${access_token}`)
@@ -57,7 +57,8 @@ class AiService {
 			console.error('Error analyzing video:', error)
 		})
 
-		console.log(headers)
+		console.log("analyzeVideo - headers", headers)
+		console.log("analyzeVideo - body", body)
 
 		if (!res) {
 			throw new Error('비디오 분석 중 오류가 발생했습니다.')
