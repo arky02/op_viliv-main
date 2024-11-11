@@ -97,10 +97,17 @@ export async function POST(request: Request) {
 									summarization,
 									frames: {
 										createMany: {
-											data: frames.map((frame: string, index: number) => ({
-												frame,
-												frameId: frames_id[index].toString(),  // 여기서 frames_id를 매칭해줌
-											})),
+											data: frames.map((frame: string, index: number) => {
+												const frameId = frames_id[index].toString()  // 여기서 frames_id를 매칭해줌
+												
+												console.log("Webhook frameId: ",frameId)
+												console.log("Webhook isThumbnail: ",thumbnails_id.includes(frameId))
+												return 	{
+													frame,
+													frameId,
+													isThumbnail: thumbnails_id.includes(frameId)
+												}
+										}),
 										},
 									},
 									framesId: frames_id.toString(),
