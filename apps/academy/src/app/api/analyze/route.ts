@@ -102,11 +102,11 @@ export async function POST(request: Request) {
 												
 												console.log("Webhook frameId: ",frameId)
 												console.log("Webhook isThumbnail: ", thumbnailsIdStr.split(',').includes(frameId))
-												return 	{
+												return 	({
 													frame,
 													frameId,
 													isThumbnail: thumbnailsIdStr.split(',').includes(frameId)
-												}
+												})
 										}),
 										},
 									},
