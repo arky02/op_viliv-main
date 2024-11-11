@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 			}
 		})
 
-		const thumbnailsIdStr = thumbnails_id.toString()
+		const thumbnailsIdStr = thumbnails_id.toString().replaceAll(' ','')
 		console.log('Webhook thumbnails_id', thumbnailsIdStr)
 		console.log('Webhook thumbnails_id type', typeof thumbnailsIdStr)
 
@@ -101,11 +101,11 @@ export async function POST(request: Request) {
 												const frameId = frames_id[index].toString()  // 여기서 frames_id를 매칭해줌
 												
 												console.log("Webhook frameId: ",frameId)
-												console.log("Webhook isThumbnail: ",thumbnails_id.includes(frameId))
+												console.log("Webhook isThumbnail: ", thumbnailsIdStr.split(',').includes(frameId))
 												return 	{
 													frame,
 													frameId,
-													isThumbnail: thumbnails_id.includes(frameId)
+													isThumbnail: thumbnailsIdStr.split(',').includes(frameId)
 												}
 										}),
 										},
