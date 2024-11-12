@@ -25,16 +25,8 @@ export default async function LectureDetailPage({
 
 	return (
 		<div className="max-pc:bg-background">
-			<LectureDetailHeader
-				lecture={lecture}
-				params={params}
-				type={type}
-			/>
-			<LectureDetailArea
-				lecture={lecture}
-				params={params}
-				type={type}
-			/>
+			<LectureDetailHeader lecture={lecture} params={params} />
+			<LectureDetailArea lecture={lecture} params={params} />
 		</div>
 	)
 }
