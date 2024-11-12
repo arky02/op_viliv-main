@@ -193,7 +193,11 @@ export function LectureDetailEditArea({
 								? frame.frame
 								: `${THUMBNAIL_IMG_BASE_URL}${lectureId}${imgType === 'default' ? '' : `/${imgType}`}/${frame.frameId}.jpg`
 							return (
-								<div key={index} className="relative">
+								<div
+									onClick={() => handleFrameSelect(index)}
+									key={index}
+									className="relative"
+								>
 									<Image
 										src={`https://${frameImgUrl}`}
 										alt="frame"
@@ -204,7 +208,6 @@ export function LectureDetailEditArea({
 												? 'border-primary border-[3px]'
 												: 'border-0'
 										}`}
-										onClick={() => handleFrameSelect(index)}
 									/>
 									<div className="text-background absolute bottom-2 left-2 px-2 py-1 text-sm font-medium">
 										{extractTimeFromFilename(frame.frame)}
