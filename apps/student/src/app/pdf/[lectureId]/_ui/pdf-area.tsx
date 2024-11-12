@@ -106,16 +106,12 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 					: finedThumbnailFrames.map((frame) => {
 							if (!frame) return frame
 
-							const frameUrlWithInfos = frame.frame
+							const lectureId = frame.frame
 								.replace('//', '/')
 								.replace(THUMBNAIL_IMG_BASE_URL, '')
-								.split('/')
+								.split('/')[0]
 
-							const frameId = frameUrlWithInfos[0]
-							const imgNo =
-								frameUrlWithInfos[frameUrlWithInfos.length - 1]
-
-							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}/${type === 'default' ? '' : `/${type}`}/${imgNo}`
+							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${lectureId}${type === 'default' ? '' : `/${type}`}/${frame.frameId}.jpg`
 
 							return {
 								...frame,

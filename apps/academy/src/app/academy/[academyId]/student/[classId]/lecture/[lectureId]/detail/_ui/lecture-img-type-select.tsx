@@ -6,26 +6,37 @@ import {
 	SelectTrigger,
 	SelectValue
 } from '@design-system/ui'
-import { useRouter } from 'next/navigation'
+import {
+	useImgTypeState,
+	useImgTypeStateAction
+} from '@core/react/zustand/imgtype-store'
 
 interface LectureImgTypeSelectProps {
 	size?: 'sm' | 'md'
 }
 
+type LectureImgType =
+	| 'default'
+	| 'person_removed'
+	| 'white_ver_dir'
+
 export function LectureImgTypeSelect({
 	size = 'md'
 }: LectureImgTypeSelectProps) {
-	const router = useRouter()
+	const imgType = useImgTypeState()
+	const setImgType = useImgTypeStateAction()
 
-	const handleImgTypeSelect = (selectedType: string) => {
-		// get current url
-		const currentUrl = window.location.href.split('?')[0]
-
-		router.push(`${currentUrl}?type=${selectedType}`)
+	const handleImgTypeSelect = (
+		selectedType: LectureImgType
+	) => {
+		setImgType(selectedType)
 	}
 
 	return (
-		<Select onValueChange={handleImgTypeSelect}>
+		<Select
+			onValueChange={handleImgTypeSelect}
+			value={imgType ?? undefined}
+		>
 			<SelectTrigger
 				className="h-fit w-fit"
 				style={{ fontSize: `${size === 'sm' ? '14' : '16'}px` }}

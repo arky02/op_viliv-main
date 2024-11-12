@@ -6,6 +6,7 @@ import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import Link from 'next/link'
+import { useImgTypeState } from '@core/react/zustand/imgtype-store'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
@@ -21,6 +22,7 @@ const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 interface Frame {
 	frame: string
 	isThumbnail: boolean
+	frameId: string
 }
 
 interface LectureDetailAreaProps {
@@ -30,20 +32,16 @@ interface LectureDetailAreaProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
-	type:
-		| undefined
-		| 'default'
-		| 'person_removed'
-		| 'white_ver_dir'
 }
 
 export function LectureDetailArea({
 	params,
-	lecture,
-	type
+	lecture
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture //Result
 	const { segments = [] } = analyzedLecture || {}
+
+	const imgType = useImgTypeState()
 
 	const calculateSegmentDuration = (
 		textWithTimestamps: { timeStamp: number }[]
@@ -75,7 +73,7 @@ export function LectureDetailArea({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${lecture.id}${type ? `?type=${type}` : ''}`
+		const url = `${window.location.origin}/pdf/${lecture.id}?type=${imgType}}`
 
 		await downloadPDF(url)
 	}
@@ -165,22 +163,18 @@ export function LectureDetailArea({
 							]
 						}
 
-						if (type) {
+						if (imgType) {
 							framesToDisplay = framesToDisplay.map(
 								(frame: Frame) => {
 									//thumbnailFrames.length > 0 : viliv.ngrok.dev/api/frames//cm2a4uoo2000113rj6bsjvxql/white_ver_dir/225.jpg
 									//thumbnailFrames.length <= 0 : viliv.ngrok.dev/api/frames/cm2a4l64d00012101y6xqkoe6/1695.jpg
 
-									const frameUrlWithInfos = frame.frame
+									const lectureId = frame.frame
 										.replace('//', '/')
 										.replace(THUMBNAIL_IMG_BASE_URL, '')
-										.split('/')
+										.split('/')[0]
 
-									const frameId = frameUrlWithInfos[0]
-									const imgNo =
-										frameUrlWithInfos[frameUrlWithInfos.length - 1]
-
-									const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}/${type === 'default' ? '' : `/${type}`}/${imgNo}`
+									const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${lectureId}${imgType === 'default' ? '' : `/${imgType}`}/${frame.frameId}.jpg`
 
 									return {
 										...frame,
