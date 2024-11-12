@@ -11,11 +11,7 @@ const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
 interface PDFAreaProps {
 	lecture: GetLectureInfo
-	type:
-		| 'default'
-		| 'person_removed'
-		| 'white_ver_dir'
-		| undefined
+	type: 'default' | 'person_removed' | 'white_ver_dir' | ''
 }
 
 function formatTimestamp(ms: number): string {

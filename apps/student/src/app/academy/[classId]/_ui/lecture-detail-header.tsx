@@ -3,6 +3,7 @@
 import { Icon } from '@design-system/icon'
 import { Button } from '@design-system/ui'
 import { useRouter } from 'next/navigation'
+import { useImgTypeState } from '@core/react/zustand/imgtype-store'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
 import { LectureInfo } from './lecture-info'
@@ -13,25 +14,21 @@ interface LectureDetailHeaderProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
-	type:
-		| 'default'
-		| 'person_removed'
-		| 'white_ver_dir'
-		| undefined
 }
 
 export function LectureDetailHeader({
 	params,
-	lecture,
-	type
+	lecture
 }: LectureDetailHeaderProps) {
+	const imgType = useImgTypeState()
+
 	const router = useRouter()
 	const goBack = () => {
 		router.back()
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${params.lectureId}${type ? `?type=${type}` : ''}`
+		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${imgType}}`
 		await downloadPDF(url)
 	}
 
