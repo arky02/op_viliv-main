@@ -12,13 +12,16 @@ interface ImgTypeProps {
 
 const useImgTypeStore = create(
   persist<ImgTypeProps>(
-    (set) => ({
-      type: get(StorageKey) as unknown as ImgTypeProps['type'] || null,
-
+    (set) => {
+			const getInitImgType = get(StorageKey) as unknown as ImgTypeProps['type'] 
+			return ({
+      type: typeof getInitImgType === 'string' ? getInitImgType : null,
       setType: (type: ImgTypeProps['type']) => {
         set({ type });
       },
-    }),
+    })
+		}
+,
     {
       name: StorageKey, 
     },
