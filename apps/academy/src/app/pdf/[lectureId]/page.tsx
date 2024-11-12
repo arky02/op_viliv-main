@@ -6,7 +6,7 @@ interface LecturePDFPageProps {
 		lectureId: string
 	}
 	searchParams: {
-		type?: 'default' | 'person_removed' | 'white_ver_dir'
+		type?: 'default' | 'person_removed' | 'white_ver_dir' | ''
 	}
 }
 
@@ -17,7 +17,7 @@ export default async function LecturePDFPage({
 	const lecture = await lectureService.getLectureInfo(
 		params.lectureId
 	)
-	const { type } = searchParams
+	const { type = '' } = searchParams
 
 	return (
 		<div>

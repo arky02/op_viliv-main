@@ -35,7 +35,7 @@ export function LectureImgTypeSelect({
 	return (
 		<Select
 			onValueChange={handleImgTypeSelect}
-			value={typeof imgType === 'string' ? imgType : undefined}
+			value={imgType ?? undefined}
 		>
 			<SelectTrigger
 				className="h-fit w-fit"

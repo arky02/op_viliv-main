@@ -12,6 +12,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useAction } from '@core/react'
 import { useRouter } from 'next/navigation'
+import { useImgTypeState } from '@core/react/zustand/imgtype-store'
 import { type GetSegmentInclude } from '@/module/segment/model'
 import { convertToTimeFormatNumber } from '@/lib/util/convert-to-time-format-number'
 import { updateSegmentAction } from '@/module/segment/action'
@@ -20,9 +21,13 @@ interface LectureDetailEditAreaProps {
 	segment: GetSegmentInclude
 }
 
+const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
+
 export function LectureDetailEditArea({
 	segment
 }: LectureDetailEditAreaProps) {
+	const imgType = useImgTypeState()
+
 	const [segmentTitle, setSegmentTitle] = useState(
 		segment.title
 	)
@@ -35,6 +40,11 @@ export function LectureDetailEditArea({
 	const [selectedFrames, setSelectedFrames] = useState<
 		number[]
 	>([])
+	const [lectureId, setLectureId] = useState(
+		segment.frames[0]?.frame
+			.replace(THUMBNAIL_IMG_BASE_URL, '')
+			.split('/')[0]
+	)
 
 	const router = useRouter()
 	const goBack = () => {
@@ -178,35 +188,40 @@ export function LectureDetailEditArea({
 						</div>
 					</div>
 					<div className="pc:grid-cols-5 pc:gap-2 grid grid-cols-1 gap-3">
-						{segment.frames.map((frame, index) => (
-							<div key={index} className="relative">
-								<Image
-									src={`https://${frame.frame}`}
-									alt="frame"
-									width={240}
-									height={150}
-									className={`aspect-video w-full cursor-pointer rounded-lg ${
-										selectedFrames.includes(index)
-											? 'border-primary border-[3px]'
-											: 'border-0'
-									}`}
-									onClick={() => handleFrameSelect(index)}
-								/>
-								<div className="text-background absolute bottom-2 left-2 px-2 py-1 text-sm font-medium">
-									{extractTimeFromFilename(frame.frame)}
+						{segment.frames.map((frame, index) => {
+							const frameImgUrl = !imgType
+								? frame.frame
+								: `${THUMBNAIL_IMG_BASE_URL}${lectureId}${imgType === 'default' ? '' : `/${imgType}`}/${frame.frameId}.jpg`
+							return (
+								<div key={index} className="relative">
+									<Image
+										src={`https://${frameImgUrl}`}
+										alt="frame"
+										width={240}
+										height={150}
+										className={`aspect-video w-full cursor-pointer rounded-lg ${
+											selectedFrames.includes(index)
+												? 'border-primary border-[3px]'
+												: 'border-0'
+										}`}
+										onClick={() => handleFrameSelect(index)}
+									/>
+									<div className="text-background absolute bottom-2 left-2 px-2 py-1 text-sm font-medium">
+										{extractTimeFromFilename(frame.frame)}
+									</div>
+									<div className="absolute right-2 top-2">
+										<Button
+											type="button"
+											size="sm"
+											options="icon"
+											disabled={!selectedFrames.includes(index)}
+										>
+											<Icon name="CheckLine" />
+										</Button>
+									</div>
 								</div>
-								<div className="absolute right-2 top-2">
-									<Button
-										type="button"
-										size="sm"
-										options="icon"
-										disabled={!selectedFrames.includes(index)}
-									>
-										<Icon name="CheckLine" />
-									</Button>
-								</div>
-							</div>
-						))}
+							)
+						})}
 					</div>
 				</div>
 				<div className="flex flex-col gap-2">

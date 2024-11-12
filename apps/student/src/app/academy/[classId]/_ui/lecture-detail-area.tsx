@@ -23,6 +23,7 @@ interface LectureDetailAreaProps {
 interface Frame {
 	frame: string
 	isThumbnail: boolean
+	frameId: string
 }
 
 export function LectureDetailArea({
@@ -151,16 +152,12 @@ export function LectureDetailArea({
 									//thumbnailFrames.length > 0 : viliv.ngrok.dev/api/frames//cm2a4uoo2000113rj6bsjvxql/white_ver_dir/225.jpg
 									//thumbnailFrames.length <= 0 : viliv.ngrok.dev/api/frames/cm2a4l64d00012101y6xqkoe6/1695.jpg
 
-									const frameUrlWithInfos = frame.frame
+									const lectureId = frame.frame
 										.replace('//', '/')
 										.replace(THUMBNAIL_IMG_BASE_URL, '')
-										.split('/')
+										.split('/')[0]
 
-									const frameId = frameUrlWithInfos[0]
-									const imgNo =
-										frameUrlWithInfos[frameUrlWithInfos.length - 1]
-
-									const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${frameId}${imgType === 'default' ? '' : `/${imgType}`}/${imgNo}`
+									const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${lectureId}${imgType === 'default' ? '' : `/${imgType}`}/${frame.frameId}.jpg`
 
 									return {
 										...frame,
