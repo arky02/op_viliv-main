@@ -188,43 +188,47 @@ export function LectureDetailEditArea({
 						</div>
 					</div>
 					<div className="pc:grid-cols-5 pc:gap-2 grid grid-cols-1 gap-3">
-						{segment.frames.map((frame, index) => {
-							const frameImgUrl = !imgType
-								? frame.frame
-								: `${THUMBNAIL_IMG_BASE_URL}${lectureId}${imgType === 'default' ? '' : `/${imgType}`}/${frame.frameId}.jpg`
-							return (
-								<div
-									onClick={() => handleFrameSelect(index)}
-									key={index}
-									className="relative"
-								>
-									<Image
-										src={`https://${frameImgUrl}`}
-										alt="frame"
-										width={240}
-										height={150}
-										className={`aspect-video w-full cursor-pointer rounded-lg ${
-											selectedFrames.includes(index)
-												? 'border-primary border-[3px]'
-												: 'border-0'
-										}`}
-									/>
-									<div className="text-background absolute bottom-2 left-2 px-2 py-1 text-sm font-medium">
-										{extractTimeFromFilename(frame.frame)}
-									</div>
-									<div className="absolute right-2 top-2">
-										<Button
-											type="button"
-											size="sm"
-											options="icon"
-											disabled={!selectedFrames.includes(index)}
-										>
-											<Icon name="CheckLine" />
-										</Button>
-									</div>
-								</div>
+						{segment.frames
+							.sort(
+								(a, b) => Number(a.frameId) - Number(b.frameId)
 							)
-						})}
+							.map((frame, index) => {
+								const frameImgUrl = !imgType
+									? frame.frame
+									: `${THUMBNAIL_IMG_BASE_URL}${lectureId}${imgType === 'default' ? '' : `/${imgType}`}/${frame.frameId}.jpg`
+								return (
+									<div
+										onClick={() => handleFrameSelect(index)}
+										key={index}
+										className="relative"
+									>
+										<Image
+											src={`https://${frameImgUrl}`}
+											alt="frame"
+											width={240}
+											height={150}
+											className={`aspect-video w-full cursor-pointer rounded-lg ${
+												selectedFrames.includes(index)
+													? 'border-primary border-[3px]'
+													: 'border-0'
+											}`}
+										/>
+										<div className="text-background absolute bottom-2 left-2 px-2 py-1 text-sm font-medium">
+											{extractTimeFromFilename(frame.frame)}
+										</div>
+										<div className="absolute right-2 top-2">
+											<Button
+												type="button"
+												size="sm"
+												options="icon"
+												disabled={!selectedFrames.includes(index)}
+											>
+												<Icon name="CheckLine" />
+											</Button>
+										</div>
+									</div>
+								)
+							})}
 					</div>
 				</div>
 				<div className="flex flex-col gap-2">
