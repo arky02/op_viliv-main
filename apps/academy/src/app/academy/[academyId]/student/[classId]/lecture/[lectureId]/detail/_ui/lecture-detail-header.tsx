@@ -36,7 +36,7 @@ export function LectureDetailHeader({
 	}
 
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${imgType}}`
+		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${imgType}`
 		await downloadPDF(url)
 	}
 
