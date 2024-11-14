@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-import { format } from 'node:path'
 
 export async function POST(req: Request) {
 	const { url } = await req.json()
@@ -33,7 +32,6 @@ export async function POST(req: Request) {
 			headless: true,
 			ignoreHTTPSErrors: true
 		})
-		console.log("browser",browser)
 		const page = await browser.newPage()
 
 		await page.goto(url, { waitUntil: 'networkidle2' })

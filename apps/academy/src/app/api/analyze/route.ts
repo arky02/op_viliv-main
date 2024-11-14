@@ -59,11 +59,6 @@ export async function POST(request: Request) {
 		})
 
 		const thumbnailsIdStr = thumbnails_id.toString().replaceAll(' ','')
-		console.log('Webhook thumbnails_id', thumbnailsIdStr)
-		console.log('Webhook thumbnails_id type', typeof thumbnailsIdStr)
-
-		console.log('Webhook lectureId', lectureId)
-		console.log('Webhook lectureId type', typeof lectureId)
 
 		const analyzedLecture = await db.analyzedLecture.create({
 			data: {
@@ -71,10 +66,6 @@ export async function POST(request: Request) {
 				thumbnailsId: thumbnailsIdStr
 			}
 		})
-
-		console.log('Webhook analyzedLecture', analyzedLecture)
-
-		console.log("Webhook segment",segments)
 
 		const segmentPromises =
 			segments && Array.isArray(segments)
@@ -99,9 +90,7 @@ export async function POST(request: Request) {
 										createMany: {
 											data: frames.map((frame: string, index: number) => {
 												const frameId = frames_id[index].toString()  // 여기서 frames_id를 매칭해줌
-												
-												console.log("Webhook frameId: ",frameId)
-												console.log("Webhook isThumbnail: ", thumbnailsIdStr.split(',').includes(frameId))
+									
 												return 	({
 													frame,
 													frameId,
@@ -132,7 +121,6 @@ export async function POST(request: Request) {
 					})
 				: []
 
-		console.log("segmentPromises",segmentPromises)
 		console.log("segments",segments)
 
 		const questionPromises =
