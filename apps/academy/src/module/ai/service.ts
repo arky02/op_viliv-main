@@ -29,8 +29,6 @@ class AiService {
 		const { access_token } = await this.getAuthToken()
 		const webhookUrl = `https://viliv-academy.vercel.app/api/analyze`;
 
-		console.log('analyzeVideo - Access token: ', access_token)
-
 		const body = new URLSearchParams()
 		body.append('video_url', videoUrl)
 		body.append('webhook_url', webhookUrl)
@@ -57,7 +55,6 @@ class AiService {
 			console.error('analyzeVideo - Error analyzing video:', error)
 		})
 
-		console.log("analyzeVideo - headers", headers)
 		console.log("analyzeVideo - body", body)
 
 		if (!res) {

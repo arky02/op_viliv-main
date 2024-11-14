@@ -31,8 +31,6 @@ export function LectureStatusSwitch({
 		})
 	}
 
-	console.log('isOpened', isOpened)
-
 	return (
 		<Switch
 			defaultChecked={isOpened}
