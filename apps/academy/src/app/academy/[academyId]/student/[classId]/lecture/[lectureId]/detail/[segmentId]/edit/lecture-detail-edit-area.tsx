@@ -213,7 +213,9 @@ export function LectureDetailEditArea({
 													: 'border-0'
 											}`}
 										/>
-										<div className="text-background absolute bottom-2 left-2 px-2 py-1 text-sm font-medium">
+										<div
+											className={`text-background absolute bottom-2 left-2 mx-1 my-1 px-1 text-sm font-medium ${imgType === 'white_ver_dir' ? 'bg-white text-black' : 'text-white'} `}
+										>
 											{extractTimeFromFilename(frame.frame)}
 										</div>
 										<div className="absolute right-2 top-2">
