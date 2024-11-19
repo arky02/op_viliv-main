@@ -146,6 +146,7 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 									</div>
 								</div>
 								<div>
+									{/* 스크립트 텍스트 부분 */}
 									{sortedTextWithTimestamps.map((item, index) => (
 										<span key={item.id}>
 											{item.text}

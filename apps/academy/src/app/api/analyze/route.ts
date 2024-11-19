@@ -2,7 +2,6 @@
 import { db } from '@core/models'
 import { NextResponse } from 'next/server'
 
-//TODO
 export async function POST(request: Request) {
 	try {
 		console.log("Webhook request",request)
@@ -13,10 +12,14 @@ export async function POST(request: Request) {
 			json
 		const lectureId = json.lecture_id
 
+    // Webhook 응답 결과 출력
 		console.log("Webhook json",json)
-
-		console.log('Webhook frames payload: ', segments[0].frames)
 		console.log('Webhook frames segment: ', segments)
+		console.log("Webhook summarization",segments.summarization)
+		console.log("Webhook text_with_timestamp",segments.text_with_timestamp)
+		console.log("Webhook frames",segments.frames)
+		console.log("Webhook frames_id",segments.frames_id)
+		
 
 		if (error) {
 			await db.lecture.update({
