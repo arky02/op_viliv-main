@@ -112,6 +112,7 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 								.split('/')[0]
 
 							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${lectureId}${type === 'default' ? '' : `/${type}`}/${frame.frameId}.jpg`
+         						console.log("pdf thumbnailUrlToDisplay: ", thumbnailUrlToDisplay)
 
 							return {
 								...frame,
