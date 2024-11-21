@@ -1,37 +1,31 @@
-import { get } from 'http';
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import { useStore } from './use-store';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-const StorageKey = 'img-type'
+const StorageKey = 'img-type';
 
 interface ImgTypeProps {
-	type:  'default' | 'person_removed'| 'white_ver_dir' | '' ,
-	setType: (type: ImgTypeProps['type']) => void
+  type: 'default' | 'person_removed' | 'white_ver_dir' | '';
+  setType: (type: ImgTypeProps['type']) => void;
 }
 
-
+// Zustand Store
 const useImgTypeStore = create(
   persist<ImgTypeProps>(
-    (set) => {
-			const getInitImgType = get(StorageKey) as unknown as ImgTypeProps['type'] 
-			return ({
-      type: typeof getInitImgType === 'string' ? getInitImgType : '',
+    (set) =>  ({
+      type: '',
       setType: (type: ImgTypeProps['type']) => {
         set({ type });
-      },
-    })
-		}
-,
+      }
+    }),
     {
       name: StorageKey, 
-    },
-  ),
+    }
+  )
 );
 
-export const useImgTypeState = () => 
-  useStore(useImgTypeStore, (state) => state.type);
+export const useImgTypeState = () =>
+  useImgTypeStore((state) => state.type);
 
-	
+
 export const useImgTypeStateAction = () =>
   useImgTypeStore((state) => state.setType);
