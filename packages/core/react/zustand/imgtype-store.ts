@@ -1,6 +1,7 @@
 import { get } from 'http';
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { useStore } from './use-store';
 
 const StorageKey = 'img-type'
 
@@ -29,7 +30,8 @@ const useImgTypeStore = create(
 );
 
 export const useImgTypeState = () => 
-	useImgTypeStore((state) => state.type);
+  useStore(useImgTypeStore, (state) => state.type);
+
 	
 	export const useImgTypeStateAction = () =>
-		useImgTypeStore((state) => state.setType);
+    useStore(useImgTypeStore, (state) => state.setType);
