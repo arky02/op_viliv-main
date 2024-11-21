@@ -101,6 +101,15 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 						? thumbnailFrames
 						: [segment.frames[0]]
 
+				console.log(
+					'finedThumbnailFrames',
+					finedThumbnailFrames
+				)
+				console.log('!type', !type)
+				console.log('!!type', !!type)
+				console.log('typeof type', typeof type)
+				console.log('type === null', type === null)
+
 				const framesToDisplay = !type
 					? finedThumbnailFrames
 					: finedThumbnailFrames.map((frame) => {
