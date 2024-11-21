@@ -6,7 +6,7 @@ import { useStore } from './use-store';
 const StorageKey = 'img-type'
 
 interface ImgTypeProps {
-	type:  null | 'default' | 'person_removed'| 'white_ver_dir',
+	type:  'default' | 'person_removed'| 'white_ver_dir' | '' ,
 	setType: (type: ImgTypeProps['type']) => void
 }
 
@@ -16,7 +16,7 @@ const useImgTypeStore = create(
     (set) => {
 			const getInitImgType = get(StorageKey) as unknown as ImgTypeProps['type'] 
 			return ({
-      type: typeof getInitImgType === 'string' ? getInitImgType : null,
+      type: typeof getInitImgType === 'string' ? getInitImgType : '',
       setType: (type: ImgTypeProps['type']) => {
         set({ type });
       },
