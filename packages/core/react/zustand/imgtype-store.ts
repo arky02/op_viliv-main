@@ -33,5 +33,5 @@ export const useImgTypeState = () =>
   useStore(useImgTypeStore, (state) => state.type);
 
 	
-	export const useImgTypeStateAction = () =>
-    useStore(useImgTypeStore, (state) => state.setType);
+export const useImgTypeStateAction = () =>
+  useImgTypeStore((state) => state.setType);
