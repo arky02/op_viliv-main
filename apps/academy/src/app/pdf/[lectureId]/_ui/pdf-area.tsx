@@ -88,9 +88,10 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 						sortedTextWithTimestamps.length - 1
 					]?.timeStamp
 
-				const thumbnailFrames = segment.frames.filter(
-					(frame) => frame.isThumbnail
-				)
+				const thumbnailFrames = segment.frames
+					.filter((frame) => frame.isThumbnail)
+					.sort((a, b) => Number(a.frameId) - Number(b.frameId))
+
 				const finedThumbnailFrames =
 					thumbnailFrames.length > 0
 						? thumbnailFrames
@@ -115,6 +116,34 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 							}
 						})
 
+				const lectureUnitScript: string[] = []
+				let segmentUnitScript: string[] = []
+
+				for (const textWithTimestampEl of sortedTextWithTimestamps) {
+					const textSecondTimestamp = Math.floor(
+						textWithTimestampEl.timeStamp / 1000
+					)
+
+					if (
+						framesToDisplay[lectureUnitScript.length] &&
+						textSecondTimestamp >
+							Number(
+								framesToDisplay[lectureUnitScript.length]?.frameId
+							)
+					) {
+						lectureUnitScript.push(segmentUnitScript.join(' '))
+						segmentUnitScript = []
+					}
+					segmentUnitScript.push(textWithTimestampEl.text)
+
+					if (
+						lectureUnitScript.length === framesToDisplay.length
+					)
+						continue
+				}
+
+				lectureUnitScript.push(segmentUnitScript.join(' '))
+
 				return (
 					<A4Layer key={segment.id}>
 						<div className="flex flex-col justify-between">
@@ -132,33 +161,33 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 												: '00:00:00'}
 										</div>
 									</div>
-									<div className="grid grid-cols-1 gap-4">
-										{framesToDisplay.map((frame, index) => (
-											<Image
-												key={frame?.id}
-												src={`https://${frame?.frame}`}
-												alt={`frame-${index}`}
-												width={1280}
-												height={720}
-												priority
-											/>
+								</div>
+								<div className="flex justify-end">
+									<div className="w-2/3 border-l-[3px] border-[#000000] pb-[15px] pl-[15px]">
+										{/* 스크립트 텍스트 부분 */}
+										{lectureUnitScript.map((scriptText, index) => (
+											<>
+												<span key={index}>{scriptText}</span>
+												{framesToDisplay[index] ? (
+													<Image
+														key={framesToDisplay[index]?.id}
+														src={`https://${framesToDisplay[index]?.frame}`}
+														alt={`frame-${index}`}
+														width={1280}
+														height={720}
+														priority
+														className="mb-[5px] mt-[30px]"
+													/>
+												) : null}
+											</>
 										))}
 									</div>
 								</div>
-								<div>
-									{/* 스크립트 텍스트 부분 */}
-									{sortedTextWithTimestamps.map((item, index) => (
-										<span key={item.id}>
-											{item.text}
-											{index < sortedTextWithTimestamps.length - 1 &&
-												' '}
-										</span>
-									))}
-								</div>
 							</div>
+							<div className="h-[3px] w-full bg-[#000000]" />
 							<div
 								style={{ pageBreakInside: 'avoid' }}
-								className="bg-secondary text-secondary-foreground px-7 py-6 text-lg font-medium"
+								className="bg-secondary text-secondary-foreground mt-[15px] px-7 py-6 text-lg font-medium"
 							>
 								{segment.summarization.join(' ')}
 							</div>
