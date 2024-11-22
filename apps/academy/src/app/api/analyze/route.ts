@@ -12,13 +12,18 @@ export async function POST(request: Request) {
 			json
 		const lectureId = json.lecture_id
 
-    // Webhook 응답 결과 출력
+
+    		// Webhook 응답 결과 출력
 		console.log("Webhook json",json)
 		console.log('Webhook frames segment: ', segments)
-		console.log("Webhook summarization",segments.summarization)
-		console.log("Webhook text_with_timestamp",segments.text_with_timestamp)
-		console.log("Webhook frames",segments.frames)
-		console.log("Webhook frames_id",segments.frames_id)
+		console.log("Webhook summarization",segments?.summarization)
+		console.log("Webhook text_with_timestamp",segments?.text_with_timestamp)
+		console.log("Webhook frames",segments?.frames)
+		console.log("Webhook frames",JSON.stringify(segments?.frames))
+		console.log("Webhook frames_id",segments?.frames_id)
+		console.log("Webhook summary_markup",segments?.summary_markup)
+		console.log("Webhook summary_markup",JSON.stringify(segments?.summary_markup))
+		console.log("Webhook summary_markup",JSON.parse(segments.summary_markup as string))
 		
 
 		if (error) {
