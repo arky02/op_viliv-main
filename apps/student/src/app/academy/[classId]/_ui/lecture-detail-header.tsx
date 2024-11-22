@@ -51,6 +51,7 @@ export function LectureDetailHeader({
 				</div>
 				<div className="flex justify-between gap-4">
 					<LectureInfo lecture={lecture} />
+
 					<div className="flex gap-4 whitespace-nowrap">
 						<LectureImgTypeSelect />
 						<Button
@@ -60,6 +61,18 @@ export function LectureDetailHeader({
 							PDF 확인하기
 						</Button>
 					</div>
+				</div>
+				<div className="-mb-[8px] -mt-[15px] flex items-center justify-end gap-[7px] text-[14px] font-semibold">
+					<Button
+						type="button"
+						size="sm"
+						options="icon"
+						className="h-[20px] w-[20px] pt-[2px] align-middle"
+						// disabled={!selectedFrames.includes(index)}
+					>
+						<Icon name="CheckLine" size={15} />
+					</Button>
+					PDF에 강의 스크립트 추가하기
 				</div>
 			</div>
 		</div>

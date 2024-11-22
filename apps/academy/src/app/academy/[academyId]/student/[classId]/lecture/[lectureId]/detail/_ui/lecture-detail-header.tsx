@@ -96,8 +96,9 @@ export function LectureDetailHeader({
 						>
 							PDF 확인하기
 						</Button>
+
 						<DropdownMenu>
-							<DropdownMenuTrigger className="mb-auto ml-auto">
+							<DropdownMenuTrigger className="ml-auto">
 								<Icon
 									name="More2Fill"
 									size={28}
@@ -118,6 +119,18 @@ export function LectureDetailHeader({
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</div>
+				</div>
+				<div className="-mb-[8px] -mt-[15px] flex items-center justify-end gap-[7px] text-[14px] font-semibold">
+					<Button
+						type="button"
+						size="sm"
+						options="icon"
+						className="h-[20px] w-[20px] pt-[2px] align-middle"
+						// disabled={!selectedFrames.includes(index)}
+					>
+						<Icon name="CheckLine" size={15} />
+					</Button>
+					PDF에 강의 스크립트 추가하기
 				</div>
 			</div>
 		</div>
