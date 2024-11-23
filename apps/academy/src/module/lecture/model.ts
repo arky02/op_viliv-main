@@ -36,6 +36,7 @@ export const getLectureInfoInclude = {
           timeStamp: true,
           summarization: true,
           framesId: true,
+          summaryMarkup: true,
           textWithTimestamps: {
             orderBy: { timeStamp: 'asc' },
             select: { id: true, timeStamp: true, segmentId: true,text: true },
