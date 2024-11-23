@@ -12,6 +12,7 @@ const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 interface PDFAreaProps {
 	lecture: GetLectureInfo
 	type: 'default' | 'person_removed' | 'white_ver_dir' | ''
+	script: boolean | undefined
 }
 
 function formatTimestamp(ms: number): string {
@@ -22,7 +23,11 @@ function formatTimestamp(ms: number): string {
 	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-export function PDFArea({ lecture, type }: PDFAreaProps) {
+export function PDFArea({
+	lecture,
+	type,
+	script
+}: PDFAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [], questions = [] } =
 		analyzedLecture || {}
@@ -167,7 +172,9 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 										{/* 스크립트 텍스트 부분 */}
 										{lectureUnitScript.map((scriptText, index) => (
 											<>
-												<span key={index}>{scriptText}</span>
+												{script ? (
+													<span key={index}>{scriptText}</span>
+												) : null}
 												{framesToDisplay[index] ? (
 													<Image
 														key={framesToDisplay[index]?.id}

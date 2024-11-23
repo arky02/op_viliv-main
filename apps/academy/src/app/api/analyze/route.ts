@@ -15,8 +15,6 @@ export async function POST(request: Request) {
     // Webhook 응답 결과 출력
 		console.log("Webhook json",json)
 		console.log('Webhook frames segment: ', segments)
-		console.log("Webhook summary_markup",segments[0]?.summary_markup)
-		console.log("Webhook summary_markup type",typeof segments[0]?.summary_markup)
 
 		if (error) {
 			await db.lecture.update({
@@ -82,7 +80,6 @@ export async function POST(request: Request) {
 						} = segment
 
 						console.log("Webhook segment summary_markup",summary_markup)	
-						console.log("Webhook segment summary_markup type", typeof summary_markup)	
 
 						if (frames && frames.length > 0) {
 							return db.segment.create({
@@ -104,6 +101,7 @@ export async function POST(request: Request) {
 										},
 									},
 									framesId: frames_id.toString(),
+									summaryMarkup: summary_markup,
 									textWithTimestamps: {
 										createMany: {
 											data: text_with_timestamp.map(
