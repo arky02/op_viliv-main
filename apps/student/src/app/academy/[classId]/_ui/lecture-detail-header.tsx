@@ -67,7 +67,7 @@ export function LectureDetailHeader({
 					</div>
 				</div>
 				<div
-					className="-mb-[8px] -mt-[13px] flex items-center justify-end gap-[7px] text-[14px] font-semibold"
+					className="-mb-[8px] -mt-[13px] flex cursor-pointer items-center justify-end gap-[7px] text-[14px] font-semibold"
 					onClick={() => setIsPDFWithScript((prev) => !prev)}
 				>
 					<Button
