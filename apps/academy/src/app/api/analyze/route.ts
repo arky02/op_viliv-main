@@ -12,19 +12,11 @@ export async function POST(request: Request) {
 			json
 		const lectureId = json.lecture_id
 
-
-    		// Webhook 응답 결과 출력
+    // Webhook 응답 결과 출력
 		console.log("Webhook json",json)
 		console.log('Webhook frames segment: ', segments)
-		console.log("Webhook summarization",segments?.summarization)
-		console.log("Webhook text_with_timestamp",segments?.text_with_timestamp)
-		console.log("Webhook frames",segments?.frames)
-		console.log("Webhook frames",JSON.stringify(segments?.frames))
-		console.log("Webhook frames_id",segments?.frames_id)
-		console.log("Webhook summary_markup",segments?.summary_markup)
-		console.log("Webhook summary_markup",JSON.stringify(segments?.summary_markup))
-		console.log("Webhook summary_markup",JSON.parse(segments.summary_markup as string))
-		
+		console.log("Webhook summary_markup",segments[0]?.summary_markup)
+		console.log("Webhook summary_markup type",typeof segments[0]?.summary_markup)
 
 		if (error) {
 			await db.lecture.update({
@@ -78,15 +70,19 @@ export async function POST(request: Request) {
 		const segmentPromises =
 			segments && Array.isArray(segments)
 				? segments.map((segment) => {
+
 						const {
 							title,
 							time_stamp,
 							summarization,
 							text_with_timestamp,
 							frames,
-							frames_id
+							frames_id,
+							summary_markup
 						} = segment
 
+						console.log("Webhook segment summary_markup",summary_markup)	
+						console.log("Webhook segment summary_markup type", typeof summary_markup)	
 
 						if (frames && frames.length > 0) {
 							return db.segment.create({
@@ -108,6 +104,7 @@ export async function POST(request: Request) {
 										},
 									},
 									framesId: frames_id.toString(),
+									summaryMarkup: summary_markup,
 									textWithTimestamps: {
 										createMany: {
 											data: text_with_timestamp.map(
@@ -128,8 +125,6 @@ export async function POST(request: Request) {
 						return null
 					})
 				: []
-
-		console.log("segments",segments)
 
 		const questionPromises =
 			questions && Array.isArray(questions)
