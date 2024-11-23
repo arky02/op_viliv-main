@@ -68,6 +68,7 @@ export async function POST(request: Request) {
 		const segmentPromises =
 			segments && Array.isArray(segments)
 				? segments.map((segment) => {
+
 						const {
 							title,
 							time_stamp,
