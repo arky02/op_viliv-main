@@ -104,7 +104,6 @@ export async function POST(request: Request) {
 										},
 									},
 									framesId: frames_id.toString(),
-									summaryMarkup: summary_markup,
 									textWithTimestamps: {
 										createMany: {
 											data: text_with_timestamp.map(
