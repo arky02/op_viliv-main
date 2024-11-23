@@ -4,6 +4,7 @@ import { Icon } from '@design-system/icon'
 import { Button } from '@design-system/ui'
 import { useRouter } from 'next/navigation'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
+import { useState } from 'react'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
 import { LectureInfo } from './lecture-info'
@@ -27,8 +28,11 @@ export function LectureDetailHeader({
 		router.back()
 	}
 
+	const [isPDFWithScript, setIsPDFWithScript] =
+		useState(true)
+
 	const handleDownloadPDF = async () => {
-		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${imgType}`
+		const url = `${window.location.origin}/pdf/${params.lectureId}?type=${imgType}${!isPDFWithScript ? '&script=false' : ''}`
 		await downloadPDF(url)
 	}
 
@@ -62,13 +66,16 @@ export function LectureDetailHeader({
 						</Button>
 					</div>
 				</div>
-				<div className="-mb-[8px] -mt-[15px] flex items-center justify-end gap-[7px] text-[14px] font-semibold">
+				<div
+					className="-mb-[8px] -mt-[13px] flex items-center justify-end gap-[7px] text-[14px] font-semibold"
+					onClick={() => setIsPDFWithScript((prev) => !prev)}
+				>
 					<Button
 						type="button"
 						size="sm"
 						options="icon"
 						className="h-[20px] w-[20px] pt-[2px] align-middle"
-						// disabled={!selectedFrames.includes(index)}
+						disabled={!isPDFWithScript}
 					>
 						<Icon name="CheckLine" size={15} />
 					</Button>
