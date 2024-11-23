@@ -197,9 +197,10 @@ export function PDFArea({
 							<div
 								style={{ pageBreakInside: 'avoid' }}
 								className="bg-secondary text-secondary-foreground mt-[15px] px-7 py-6 text-lg font-medium"
-							>
-								{segment.summarization.join(' ')}
-							</div>
+								dangerouslySetInnerHTML={{
+									__html: segment.summaryMarkup
+								}}
+							/>
 						</div>
 					</A4Layer>
 				)
