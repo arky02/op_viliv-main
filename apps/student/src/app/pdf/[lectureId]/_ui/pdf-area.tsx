@@ -12,7 +12,7 @@ const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 interface PDFAreaProps {
 	lecture: GetLectureInfo
 	type: 'default' | 'person_removed' | 'white_ver_dir' | ''
-	script: boolean | undefined
+	script: boolean
 }
 
 function formatTimestamp(ms: number): string {
@@ -31,6 +31,8 @@ export function PDFArea({
 	const { analyzedLecture } = lecture
 	const { segments = [], questions = [] } =
 		analyzedLecture || {}
+
+	console.log('script', script)
 
 	return (
 		<div className="bg-background flex flex-col">
@@ -195,9 +197,10 @@ export function PDFArea({
 							<div
 								style={{ pageBreakInside: 'avoid' }}
 								className="bg-secondary text-secondary-foreground mt-[15px] px-7 py-6 text-lg font-medium"
-							>
-								{segment.summarization.join(' ')}
-							</div>
+								dangerouslySetInnerHTML={{
+									__html: segment.summaryMarkup
+								}}
+							/>
 						</div>
 					</A4Layer>
 				)
