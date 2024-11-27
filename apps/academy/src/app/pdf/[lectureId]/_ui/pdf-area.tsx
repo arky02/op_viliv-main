@@ -151,9 +151,9 @@ export function PDFArea({
 				return (
 					<A4Layer key={segment.id}>
 						<div className="flex flex-col justify-between">
-							<div className="flex flex-col gap-10">
+							<div className="flex flex-col">
 								<div className="flex flex-col gap-2">
-									<div className="bg-secondary flex items-center justify-between border px-6 py-4 text-lg font-semibold">
+									<div className="flex items-center justify-between border-[1px] border-[#000000] px-6 py-5 text-lg font-semibold">
 										<div>{segment.title}</div>
 										<div className="text-secondary-foreground text-sm font-medium">
 											{firstTimestamp
@@ -167,7 +167,7 @@ export function PDFArea({
 									</div>
 								</div>
 								<div className="flex justify-end">
-									<div className="w-2/3 border-l-[3px] border-[#000000] pb-[15px] pl-[15px]">
+									<div className="w-2/3 border-l-[1px] border-[#000000] p-[15px] pr-0">
 										{/* 스크립트 텍스트 부분 */}
 										{lectureUnitScript.map((scriptText, index) => (
 											<>
@@ -190,7 +190,7 @@ export function PDFArea({
 									</div>
 								</div>
 							</div>
-							<div className="h-[3px] w-full bg-[#000000]" />
+							<div className="h-[1px] w-full bg-[#000000]" />
 							<div
 								style={{ pageBreakInside: 'avoid' }}
 								className="bg-secondary text-secondary-foreground mt-[15px] px-7 py-6 text-lg font-medium"
