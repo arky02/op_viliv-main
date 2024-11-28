@@ -32,7 +32,7 @@ export function AcademyCreateForm({
 	const createAction = useAction(createAcademyAction, {
 		onSuccess: () => {
 			toast({
-				title: '학원 생성 성공',
+				title: '기관 생성 성공',
 				variant: 'positive'
 			})
 			router.replace(`/academy`)
@@ -62,7 +62,7 @@ export function AcademyCreateForm({
 		<div className="max-pc:justify-start mx-auto flex h-full max-w-[640px] flex-col justify-center gap-10 p-4">
 			<div className="max-pc:hidden flex items-center justify-between">
 				<div className="text-2xl font-semibold">
-					학원 생성하기
+					기관 생성하기
 				</div>
 				<button type="button" onClick={goBack}>
 					<Icon
@@ -87,14 +87,14 @@ export function AcademyCreateForm({
 						)}
 					/>
 
-					{/* 학원 이름 */}
+					{/* 기관 이름 */}
 					<FormField
 						name="name"
 						render={({ field }) => (
-							<FormFieldItem title="학원 이름">
+							<FormFieldItem title="기관 이름">
 								<Input
 									{...field}
-									placeholder="학원 이름을 입력해 주세요"
+									placeholder="기관 이름을 입력해 주세요"
 								/>
 							</FormFieldItem>
 						)}

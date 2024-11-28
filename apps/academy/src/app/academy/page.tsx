@@ -31,9 +31,9 @@ export default async function AcademyPage() {
 			<section>
 				<div className="flex flex-col">
 					<div className="pc:pt-10 pc:pb-6 flex items-center justify-between p-4">
-						<div className="text-2xl font-semibold">학원</div>
+						<div className="text-2xl font-semibold">기관</div>
 						<Button asChild size="sm" className="h-fit">
-							<Link href="/academy/create">학원 생성하기</Link>
+							<Link href="/academy/create">기관 생성하기</Link>
 						</Button>
 					</div>
 					{academies.length > 0 ? (

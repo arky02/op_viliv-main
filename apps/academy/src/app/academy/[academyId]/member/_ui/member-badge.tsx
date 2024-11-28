@@ -9,7 +9,7 @@ export function MemberBadge({ member }: MemberCardProps) {
 	let badgeText
 
 	if (member.role === 'OWNER') {
-		badgeText = '원장'
+		badgeText = '대표'
 	} else if (member.role === 'MANAGER') {
 		badgeText = '관리자'
 	} else {

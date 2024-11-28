@@ -34,7 +34,7 @@ class PaymentService {
 		const { academyId, cardNumber, cardName, billingKey } =
 			dto
 
-		// 학원에 카드 정보만 등록 (결제는 수행하지 않음)
+		// 기관에 카드 정보만 등록 (결제는 수행하지 않음)
 		await db.academy.update({
 			where: {
 				id: academyId

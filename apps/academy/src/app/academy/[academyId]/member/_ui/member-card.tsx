@@ -104,7 +104,7 @@ export function MemberCard({
 				</div>
 			</div>
 			{/* memberCard의 대상이 강사일 때 접속자가 강사가 아니거나, 
-			    memberCard의 대상이 관리자일 때 접속자가 원장일 경우에만 보입니다 */}
+			    memberCard의 대상이 관리자일 때 접속자가 대표일 경우에만 보입니다 */}
 			{((member.role === 'TEACHER' &&
 				memberRole !== 'TEACHER') ||
 				(member.role === 'MANAGER' &&
