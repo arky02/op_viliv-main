@@ -11,15 +11,15 @@ export function AcademyEmpty() {
 					className="text-muted-foreground h-[60px] w-[60px]"
 				/>
 				<div className="flex flex-col items-center justify-center gap-1">
-					<div>아직 추가한 학원이 없어요</div>
+					<div>아직 추가한 기관이 없어요</div>
 					<div>
-						새 학원을 추가하려면 &apos;학원 추가하기&apos; 버튼을
+						새 기관을 추가하려면 &apos;기관 추가하기&apos; 버튼을
 						눌러 주세요
 					</div>
 				</div>
 			</div>
 			<Link href="/search">
-				<Button>학원 추가하기</Button>
+				<Button>기관 추가하기</Button>
 			</Link>
 		</div>
 	)

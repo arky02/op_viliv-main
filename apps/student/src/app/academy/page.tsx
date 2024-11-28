@@ -38,10 +38,10 @@ export default async function AcademyPage() {
 			<section>
 				<div className="flex flex-col">
 					<div className="pc:pt-10 pc:pb-6 flex items-center justify-between p-4">
-						<div className="text-2xl font-semibold">학원</div>
+						<div className="text-2xl font-semibold">기관</div>
 						<Link href="/search">
 							<Button size="sm" className="h-fit">
-								학원 추가하기
+								기관 추가하기
 							</Button>
 						</Link>
 					</div>
