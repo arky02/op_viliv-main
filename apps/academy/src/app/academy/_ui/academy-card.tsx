@@ -35,13 +35,13 @@ export function AcademyCard({
 		{
 			onSuccess: () => {
 				toast({
-					title: '학원 초대를 수락했습니다',
+					title: '기관 초대를 수락했습니다',
 					variant: 'positive'
 				})
 			},
 			onError: () => {
 				toast({
-					title: '학원 초대 수락에 실패했습니다',
+					title: '기관 초대 수락에 실패했습니다',
 					variant: 'negative'
 				})
 			}
@@ -51,13 +51,13 @@ export function AcademyCard({
 	const RemoveMemberAction = useAction(removeMemberAction, {
 		onSuccess: () => {
 			toast({
-				title: '학원 초대를 거절했습니다',
+				title: '기관 초대를 거절했습니다',
 				variant: 'positive'
 			})
 		},
 		onError: () => {
 			toast({
-				title: '학원 초대 거절에 실패했습니다',
+				title: '기관 초대 거절에 실패했습니다',
 				variant: 'negative'
 			})
 		}

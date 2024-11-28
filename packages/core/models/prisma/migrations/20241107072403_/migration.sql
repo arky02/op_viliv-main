@@ -108,6 +108,7 @@ CREATE TABLE "segment" (
     "summarization" TEXT[],
     "analyzed_lecture_id" TEXT NOT NULL,
     "frames_id" INTEGER[],
+    "summary_markup" TEXT[],
 
     CONSTRAINT "segment_pkey" PRIMARY KEY ("id")
 );

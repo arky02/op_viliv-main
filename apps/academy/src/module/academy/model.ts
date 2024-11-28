@@ -31,7 +31,7 @@ export type GetAcademies = Prisma.AcademyGetPayload<{
 
 export const createAcademyDto = z.object({
 	name: z.string().min(2, {
-		message: '올바른 학원 이름을 입력해주세요'
+		message: '올바른 기관 이름을 입력해주세요'
 	}),
 	image: z.string(),
 	phoneNumber: z.string(),

@@ -18,13 +18,13 @@ export default async function SearchPage() {
 	return (
 		<div>
 			<div className="flex flex-col">
-				<MobileDetailHeader title="학원 검색하기" />
+				<MobileDetailHeader title="기관 검색하기" />
 				<div className="pc:bg-background pc:border-b max-pc:hidden flex items-center gap-3 px-[120px] py-6">
 					<Link href="/academy">
 						<Icon name="ArrowLeftLine" size={28} />
 					</Link>
 					<div className="text-xl font-semibold">
-						학원 검색하기
+						기관 검색하기
 					</div>
 				</div>
 				<SearchArea userInfo={userInfo} />

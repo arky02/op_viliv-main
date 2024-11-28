@@ -45,6 +45,7 @@ model Segment {
   textWithTimestamps TextWithTimestamp[]
   frames             Frame[]
   framesId           String               @map("frames_id")   // V2_Added: newly added in v2
+  summaryMarkup      String               @map("summary_markup")   // V3_Added: newly added in v3
 
   @@map("segment")
 }

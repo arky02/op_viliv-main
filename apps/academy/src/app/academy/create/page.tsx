@@ -13,7 +13,7 @@ export default async function AcademyCreatePage() {
 
 	return (
 		<div className="bg-background h-screen">
-			<MobileDetailHeader title="학원 생성하기" />
+			<MobileDetailHeader title="기관 생성하기" />
 			<AcademyCreateForm phoneNumber={phoneNumber} />
 		</div>
 	)

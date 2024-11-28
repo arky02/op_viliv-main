@@ -27,7 +27,7 @@ export function PlanCardEnterprise({
 						{name}
 					</div>
 					<div className="text-secondary-foreground text-sm">
-						대형 학원, 학교, 기관 등을 위한 맞춤 플랜을 제공해
+						대형 기관, 학교, 기관 등을 위한 맞춤 플랜을 제공해
 						드려요
 					</div>
 				</div>

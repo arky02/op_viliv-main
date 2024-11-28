@@ -48,7 +48,7 @@ export default async function PlanUpgradePage({
 					<PlanUpgradeCard
 						academyInfo={academyInfo}
 						name="STANDARD"
-						description="1-3명의 소규모 학원에 적합한 플랜이에요"
+						description="1-3명의 소규모 기관에 적합한 플랜이에요"
 						price={90000}
 						credit={100}
 						currentPlan={currentPlan}
@@ -56,7 +56,7 @@ export default async function PlanUpgradePage({
 					<PlanUpgradeCard
 						academyInfo={academyInfo}
 						name="PRO"
-						description="5명 이상 규모의 수업이 많은 학원에 적합한 플랜이에요"
+						description="5명 이상 규모의 수업이 많은 기관에 적합한 플랜이에요"
 						price={350000}
 						credit={500}
 						currentPlan={currentPlan}

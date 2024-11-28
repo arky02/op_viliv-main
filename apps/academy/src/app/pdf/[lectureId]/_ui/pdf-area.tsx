@@ -12,6 +12,7 @@ const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 interface PDFAreaProps {
 	lecture: GetLectureInfo
 	type: 'default' | 'person_removed' | 'white_ver_dir' | ''
+	script: 'true' | 'false'
 }
 
 function formatTimestamp(ms: number): string {
@@ -22,7 +23,11 @@ function formatTimestamp(ms: number): string {
 	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 }
 
-export function PDFArea({ lecture, type }: PDFAreaProps) {
+export function PDFArea({
+	lecture,
+	type,
+	script
+}: PDFAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [], questions = [] } =
 		analyzedLecture || {}
@@ -88,9 +93,10 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 						sortedTextWithTimestamps.length - 1
 					]?.timeStamp
 
-				const thumbnailFrames = segment.frames.filter(
-					(frame) => frame.isThumbnail
-				)
+				const thumbnailFrames = segment.frames
+					.filter((frame) => frame.isThumbnail)
+					.sort((a, b) => Number(a.frameId) - Number(b.frameId))
+
 				const finedThumbnailFrames =
 					thumbnailFrames.length > 0
 						? thumbnailFrames
@@ -107,7 +113,6 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 								.split('/')[0]
 
 							const thumbnailUrlToDisplay = `${THUMBNAIL_IMG_BASE_URL}${lectureId}${type === 'default' ? '' : `/${type}`}/${frame.frameId}.jpg`
-							console.log(thumbnailUrlToDisplay)
 
 							return {
 								...frame,
@@ -115,12 +120,40 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 							}
 						})
 
+				const lectureUnitScript: string[] = []
+				let segmentUnitScript: string[] = []
+
+				for (const textWithTimestampEl of sortedTextWithTimestamps) {
+					const textSecondTimestamp = Math.floor(
+						textWithTimestampEl.timeStamp / 1000
+					)
+
+					if (
+						framesToDisplay[lectureUnitScript.length] &&
+						textSecondTimestamp >
+							Number(
+								framesToDisplay[lectureUnitScript.length]?.frameId
+							)
+					) {
+						lectureUnitScript.push(segmentUnitScript.join(' '))
+						segmentUnitScript = []
+					}
+					segmentUnitScript.push(textWithTimestampEl.text)
+
+					if (
+						lectureUnitScript.length === framesToDisplay.length
+					)
+						continue
+				}
+
+				lectureUnitScript.push(segmentUnitScript.join(' '))
+
 				return (
 					<A4Layer key={segment.id}>
 						<div className="flex flex-col justify-between">
-							<div className="flex flex-col gap-10">
+							<div className="flex flex-col">
 								<div className="flex flex-col gap-2">
-									<div className="bg-secondary flex items-center justify-between border px-6 py-4 text-lg font-semibold">
+									<div className="flex items-center justify-between border-[1px] border-[#000000] px-6 py-5 text-lg font-semibold">
 										<div>{segment.title}</div>
 										<div className="text-secondary-foreground text-sm font-medium">
 											{firstTimestamp
@@ -132,36 +165,39 @@ export function PDFArea({ lecture, type }: PDFAreaProps) {
 												: '00:00:00'}
 										</div>
 									</div>
-									<div className="grid grid-cols-1 gap-4">
-										{framesToDisplay.map((frame, index) => (
-											<Image
-												key={frame?.id}
-												src={`https://${frame?.frame}`}
-												alt={`frame-${index}`}
-												width={1280}
-												height={720}
-												priority
-											/>
+								</div>
+								<div className="flex justify-end">
+									<div className="w-2/3 border-l-[1px] border-[#000000] p-[15px] pr-0">
+										{/* 스크립트 텍스트 부분 */}
+										{lectureUnitScript.map((scriptText, index) => (
+											<>
+												{script === 'true' ? (
+													<span key={index}>{scriptText}</span>
+												) : null}
+												{framesToDisplay[index] ? (
+													<Image
+														key={framesToDisplay[index]?.id}
+														src={`https://${framesToDisplay[index]?.frame}`}
+														alt={`frame-${index}`}
+														width={1280}
+														height={720}
+														priority
+														className="mb-[5px] mt-[30px]"
+													/>
+												) : null}
+											</>
 										))}
 									</div>
 								</div>
-								<div>
-									{/* 스크립트 텍스트 부분 */}
-									{sortedTextWithTimestamps.map((item, index) => (
-										<span key={item.id}>
-											{item.text}
-											{index < sortedTextWithTimestamps.length - 1 &&
-												' '}
-										</span>
-									))}
-								</div>
 							</div>
+							<div className="h-[1px] w-full bg-[#000000]" />
 							<div
 								style={{ pageBreakInside: 'avoid' }}
-								className="bg-secondary text-secondary-foreground px-7 py-6 text-lg font-medium"
-							>
-								{segment.summarization.join(' ')}
-							</div>
+								className="bg-secondary text-secondary-foreground mt-[15px] px-7 py-6 text-lg font-medium"
+								dangerouslySetInnerHTML={{
+									__html: segment.summaryMarkup
+								}}
+							/>
 						</div>
 					</A4Layer>
 				)

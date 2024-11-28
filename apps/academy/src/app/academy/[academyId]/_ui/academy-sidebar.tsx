@@ -129,7 +129,7 @@ export function AcademySidebar({
 									size={16}
 									className="text-muted-foreground"
 								/>
-								학원 리스트로 이동
+								기관 리스트로 이동
 							</div>
 						</Button>
 					</Link>

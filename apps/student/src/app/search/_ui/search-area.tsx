@@ -64,7 +64,7 @@ export function SearchArea({
 		<div className="pc:px-[120px] flex flex-col p-4">
 			<div className="pc:py-10 flex gap-2">
 				<Input
-					placeholder="학원 이름으로 검색해 보세요"
+					placeholder="기관 이름으로 검색해 보세요"
 					className="flex-1"
 					value={keyword}
 					onChange={handleKeywordChange}
