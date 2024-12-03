@@ -1,11 +1,14 @@
 'use client'
-
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/no-array-index-key */
+
 import { useRef } from 'react'
 import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
+import { Carousel } from 'react-responsive-carousel'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
@@ -196,8 +199,12 @@ export function LectureDetailArea({
 									</div>
 								</div>
 								{framesToDisplay.length > 0 ? (
-									framesToDisplay.map((frame, idx) => {
-										return (
+									<Carousel
+										width="fit-content"
+										showThumbs={false}
+										showStatus={false}
+									>
+										{framesToDisplay.map((frame, idx) => (
 											<Image
 												key={idx}
 												src={`https://${frame.frame}`}
@@ -205,8 +212,8 @@ export function LectureDetailArea({
 												width={640}
 												height={360}
 											/>
-										)
-									})
+										))}
+									</Carousel>
 								) : (
 									<Image
 										src={defaultImage}
