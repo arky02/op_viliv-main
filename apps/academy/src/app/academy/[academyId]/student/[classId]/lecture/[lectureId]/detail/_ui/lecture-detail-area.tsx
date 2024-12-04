@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/no-array-index-key */
 
 import { useRef } from 'react'
