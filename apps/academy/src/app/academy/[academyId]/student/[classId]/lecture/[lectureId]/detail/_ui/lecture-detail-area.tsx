@@ -1,5 +1,4 @@
 'use client'
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/no-array-index-key */
 
 import { useRef } from 'react'
@@ -18,7 +17,6 @@ import { SummaryEditModal } from './summary-edit-modal'
 import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
-import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
