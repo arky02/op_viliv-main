@@ -16,6 +16,7 @@ import { SummaryEditModal } from './summary-edit-modal'
 import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
+import Slider from './lecture-slider'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -232,15 +233,18 @@ export function LectureDetailArea({
 								</div>
 
 								{framesToDisplay.length > 0 ? (
-									framesToDisplay.map((frame, idx) => (
-										<Image
-											key={idx}
-											src={`https://${frame.frame}`}
-											alt={segment.title}
-											width={640}
-											height={360}
-										/>
-									))
+									<Slider>
+										{framesToDisplay.map((frame, idx) => (
+											<Image
+												key={idx}
+												src={`https://${frame.frame}`}
+												alt={segment.title}
+												width={640}
+												height={360}
+												className="flex h-fit w-full flex-shrink-0"
+											/>
+										))}
+									</Slider>
 								) : (
 									<Image
 										src={defaultImage}
