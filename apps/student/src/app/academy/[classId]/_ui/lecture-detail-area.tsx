@@ -1,6 +1,7 @@
 'use client'
 /* eslint-disable react/no-array-index-key */
 
+import dynamic from 'next/dynamic'
 import { useRef } from 'react'
 import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
@@ -13,6 +14,15 @@ import { convertToTimeFormatNumber } from '@/lib/util/conver-to-time-format-numb
 import { TimestampAccordion } from './timestamp-accordion'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+
+const Carousel = dynamic(
+	() =>
+		import('react-responsive-carousel').then(
+			(mod) => mod.Carousel
+		),
+	{ ssr: false }
+)
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -196,15 +206,21 @@ export function LectureDetailArea({
 									</div>
 								</div>
 								{framesToDisplay.length > 0 ? (
-									framesToDisplay.map((frame, idx) => (
-										<Image
-											key={idx}
-											src={`https://${frame.frame}`}
-											alt={segment.title}
-											width={640}
-											height={360}
-										/>
-									))
+									<Carousel
+										width="fit-content"
+										showThumbs={false}
+										showStatus={false}
+									>
+										{framesToDisplay.map((frame, idx) => (
+											<Image
+												key={idx}
+												src={`https://${frame.frame}`}
+												alt={segment.title}
+												width={640}
+												height={360}
+											/>
+										))}
+									</Carousel>
 								) : (
 									<Image
 										src={defaultImage}
