@@ -13,6 +13,7 @@ import { convertToTimeFormatNumber } from '@/lib/util/conver-to-time-format-numb
 import { TimestampAccordion } from './timestamp-accordion'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
+import Slider from './lecture-slider'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -196,17 +197,20 @@ export function LectureDetailArea({
 									</div>
 								</div>
 								{framesToDisplay.length > 0 ? (
-									framesToDisplay.map((frame, idx) => {
-										return (
-											<Image
-												key={idx}
-												src={`https://${frame.frame}`}
-												alt={segment.title}
-												width={640}
-												height={360}
-											/>
-										)
-									})
+									<Slider>
+										{framesToDisplay.map((frame, idx) => {
+											return (
+												<Image
+													key={idx}
+													src={`https://${frame.frame}`}
+													alt={segment.title}
+													width={640}
+													height={360}
+													className="flex h-fit w-full flex-shrink-0"
+												/>
+											)
+										})}
+									</Slider>
 								) : (
 									<Image
 										src={defaultImage}
