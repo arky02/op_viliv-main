@@ -39,7 +39,6 @@
 	"packageManager": "pnpm@8.6.10",
 	"name": "boilerplate-template",
 	"dependencies": {
-		"dotenv-cli": "^7.3.0",
-		"react-responsive-carousel": "^3.2.23"
+		"dotenv-cli": "^7.3.0"
 	}
 }
