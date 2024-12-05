@@ -25,6 +25,8 @@ function Slider({
 		setCurrentIndex(index)
 	}
 
+	if (children.length === 1) return <>{children}</>
+
 	return (
 		<div className="flex flex-col items-center gap-[8px]">
 			<div className="relative w-fit overflow-hidden">
