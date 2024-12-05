@@ -1,14 +1,12 @@
 'use client'
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable react/no-array-index-key */
 
+/* eslint-disable react/no-array-index-key */
 import { useRef } from 'react'
 import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import Link from 'next/link'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
-import { Carousel } from 'react-responsive-carousel'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
@@ -18,7 +16,6 @@ import { SummaryEditModal } from './summary-edit-modal'
 import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
-import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -235,21 +232,15 @@ export function LectureDetailArea({
 								</div>
 
 								{framesToDisplay.length > 0 ? (
-									<Carousel
-										width="fit-content"
-										showThumbs={false}
-										showStatus={false}
-									>
-										{framesToDisplay.map((frame, idx) => (
-											<Image
-												key={idx}
-												src={`https://${frame.frame}`}
-												alt={segment.title}
-												width={640}
-												height={360}
-											/>
-										))}
-									</Carousel>
+									framesToDisplay.map((frame, idx) => (
+										<Image
+											key={idx}
+											src={`https://${frame.frame}`}
+											alt={segment.title}
+											width={640}
+											height={360}
+										/>
+									))
 								) : (
 									<Image
 										src={defaultImage}
