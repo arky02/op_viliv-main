@@ -118,7 +118,7 @@ export function LectureDetailArea({
 								강의 전체 요약
 							</div>
 						</div>
-						<div className="max-h-[320px] overflow-y-auto text-sm">
+						<div className="max-h-[228px] overflow-y-auto text-sm">
 							{lecture.description}
 						</div>
 					</div>
