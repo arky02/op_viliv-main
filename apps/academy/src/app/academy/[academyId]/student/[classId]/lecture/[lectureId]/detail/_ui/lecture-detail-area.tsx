@@ -129,7 +129,7 @@ export function LectureDetailArea({
 							</div>
 							<SummaryEditModal lecture={lecture} />
 						</div>
-						<div className="max-h-[320px] overflow-y-auto text-sm">
+						<div className="max-h-[228px] overflow-y-auto text-sm">
 							{lecture.description}
 						</div>
 					</div>
