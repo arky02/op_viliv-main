@@ -39,6 +39,7 @@
 	"packageManager": "pnpm@8.6.10",
 	"name": "boilerplate-template",
 	"dependencies": {
-		"dotenv-cli": "^7.3.0"
+		"dotenv-cli": "^7.3.0",
+		"plyr": "^3.7.8"
 	}
 }
