@@ -1,8 +1,4 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import { lectureService } from '@/module/lecture/service'
-import { type GetLectureInfo } from '@/module/lecture/model'
 import { LectureDetailHeader } from './_ui/lecture-detail-header'
 import { LectureDetailArea } from './_ui/lecture-detail-area'
 
@@ -13,33 +9,18 @@ interface LectureDetailPageProps {
 		lectureId: string
 	}
 }
-
-export default function LectureDetailPage({
+export default async function LectureDetailPage({
 	params
 }: LectureDetailPageProps) {
-	const [lecture, setLecture] = useState<GetLectureInfo>()
+	const { lectureId } = params
 
-	useEffect(() => {
-		const getLectureInfo = async () => {
-			const lectureVal = await lectureService.getLectureInfo(
-				params.lectureId
-			)
-			setLecture(lectureVal)
-		}
-		void getLectureInfo()
-	}, [params.lectureId])
+	const lecture =
+		await lectureService.getLectureInfo(lectureId)
 
 	return (
 		<div className="max-pc:bg-background">
-			{lecture ? (
-				<>
-					<LectureDetailHeader
-						lecture={lecture}
-						params={params}
-					/>
-					<LectureDetailArea lecture={lecture} params={params} />
-				</>
-			) : null}
+			<LectureDetailHeader lecture={lecture} params={params} />
+			<LectureDetailArea lecture={lecture} params={params} />
 		</div>
 	)
 }

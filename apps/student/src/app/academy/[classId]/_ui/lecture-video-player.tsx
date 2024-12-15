@@ -2,7 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import Plyr from 'plyr'
-import 'plyr/dist/plyr.css'
 import { type GetLectureInfo } from '@/module/lecture/model'
 
 function VideoPlayer({
