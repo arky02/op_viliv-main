@@ -1,22 +1,26 @@
 'use client'
 
 /* eslint-disable react/no-array-index-key */
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import Link from 'next/link'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
+import { redirect } from 'next/navigation'
+import { authService } from '@providers/auth'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
 import { convertToTimeFormatNumber } from '@/lib/util/convert-to-time-format-number'
+import { userService } from '@/module/user/service'
 import { TimestampAccordion } from './timestamp-accordion'
 import { SummaryEditModal } from './summary-edit-modal'
 import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
 import Slider from './lecture-slider'
+import VideoPlayer from './lecture-video-player'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -41,6 +45,9 @@ export function LectureDetailArea({
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture //Result
 	const { segments = [] } = analyzedLecture || {}
+	const [userPhoneNum, setUserPhoneNum] = useState<
+		string | null
+	>(null)
 
 	const imgType = useImgTypeState()
 
@@ -79,20 +86,32 @@ export function LectureDetailArea({
 		await downloadPDF(url)
 	}
 
+	useEffect(() => {
+		const getPhoneNumber = async () => {
+			const session = await authService.getMySession()
+			if (!session) redirect('/start')
+
+			const phoneNumber =
+				await userService.getPhoneNumberByUserId(
+					session.user.id
+				)
+			if (!phoneNumber) {
+				redirect('/error')
+			}
+			setUserPhoneNum(phoneNumber)
+		}
+
+		void getPhoneNumber()
+	}, [])
+
 	return (
 		<div className="flex flex-col">
 			{/* 모바일 비디오 */}
-			<video
-				ref={mobileVideoRef}
-				src={lecture.videoUrl}
-				controls
-				controlsList="nodownload"
-				onContextMenu={(e) => e.preventDefault()}
-				playsInline
-				className="pc:hidden sticky top-0 z-10 w-full"
-			>
-				<track kind="captions" label="Korean" />
-			</video>
+			<VideoPlayer
+				lecture={lecture}
+				watermarkText={userPhoneNum ?? 'VILIV'}
+				device="mobile"
+			/>
 			<div className="pc:hidden flex items-end p-4">
 				<LectureInfo lecture={lecture} />
 				<LectureImgTypeSelect size="sm" />
@@ -111,17 +130,10 @@ export function LectureDetailArea({
 			<div className="max-pc:flex-col pc:mx-[120px] pc:mt-10 mx-4 flex gap-5">
 				<div className="bg-background pc:w-1/2 pc:sticky pc:top-10 flex h-fit flex-col gap-4 rounded-md border p-4 shadow">
 					{/* PC 비디오 */}
-					<video
-						ref={pcVideoRef}
-						src={lecture.videoUrl}
-						controls
-						controlsList="nodownload"
-						onContextMenu={(e) => e.preventDefault()}
-						playsInline
-						className="max-pc:hidden w-full rounded-md"
-					>
-						<track kind="captions" label="Korean" />
-					</video>
+					<VideoPlayer
+						lecture={lecture}
+						watermarkText={userPhoneNum ?? 'VILIV'}
+					/>
 					<div className="flex flex-col gap-4 rounded-md border p-6">
 						<div className="flex items-center justify-between">
 							<div className="text-lg font-semibold">
