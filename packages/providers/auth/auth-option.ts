@@ -1,5 +1,3 @@
-// auth-oprions
-
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { db } from '@core/models'
 import { NextAuthConfig } from 'next-auth'
@@ -37,27 +35,20 @@ const authOptions: NextAuthConfig = {
     })
   ],
   cookies: {
-    sessionToken: {
-      name: `__Secure-next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
+    // sessionToken: {
+    //   name: `__Secure-next-auth.session-token`,
+    //   options: {
+    //     httpOnly: true,
+    //     sameSite: "Lax",
+    //     path: "/",
+    //     secure: process.env.NODE_ENV === "production",
+    //   },
+    // },
   },
   session: {
     strategy: 'jwt'
   },
   callbacks: {
-    // TEST
-    async redirect({ url, baseUrl }) {
-      // 개발 환경에서는 localhost로 리다이렉트, 프로덕션에서는 배포된 URL로 리다이렉트
-      return process.env.NODE_ENV === 'development'
-        ? 'http://localhost:3000'
-        : baseUrl
-    },
     session: async ({ session, token }) => {
       if (!session?.user) session
 
@@ -71,5 +62,4 @@ const authOptions: NextAuthConfig = {
 }
 
 export { authOptions }
-
 
