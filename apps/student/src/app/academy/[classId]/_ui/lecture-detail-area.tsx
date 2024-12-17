@@ -98,7 +98,7 @@ export function LectureDetailArea({
 		void getPhoneNumber()
 	}, [])
 
-	console.log("user pn", userPhoneNumber)
+	console.log("user pn", userPhoneNum)
 
 	return (
 		<div className="flex flex-col">
