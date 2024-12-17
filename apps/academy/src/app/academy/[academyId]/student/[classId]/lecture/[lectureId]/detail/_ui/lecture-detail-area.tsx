@@ -37,18 +37,16 @@ interface LectureDetailAreaProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
+	phoneNumber: string
 }
 
 export function LectureDetailArea({
 	params,
-	lecture
+	lecture,
+	phoneNumber
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
-	const [userPhoneNum, setUserPhoneNum] = useState<
-		string | null
-	>(null)
-
 	const imgType = useImgTypeState()
 
 	const calculateSegmentDuration = (
@@ -86,24 +84,6 @@ export function LectureDetailArea({
 		await downloadPDF(url)
 	}
 
-	useEffect(() => {
-		const getPhoneNumber = async () => {
-			const session = await authService.getMySession()
-			if (!session) redirect('/start')
-
-			const phoneNumber =
-				await userService.getPhoneNumberByUserId(
-					session.user.id
-				)
-			if (!phoneNumber) {
-				redirect('/error')
-			}
-			setUserPhoneNum(phoneNumber)
-		}
-
-		void getPhoneNumber()
-	}, [])
-
 	return (
 		<div className="flex flex-col">
 			{/* 모바일 비디오 */}
@@ -111,7 +91,7 @@ export function LectureDetailArea({
 				src={lecture.videoUrl}
 				videoRef={mobileVideoRef}
 				device="mobile"
-				watermarkText={userPhoneNum || 'VILIV'}
+				watermarkText={phoneNumber || 'VILIV'}
 			/>
 			<div className="pc:hidden flex items-end p-4">
 				<LectureInfo lecture={lecture} />
@@ -134,7 +114,7 @@ export function LectureDetailArea({
 					<VideoWithWatermark
 						src={lecture.videoUrl}
 						videoRef={pcVideoRef}
-						watermarkText={userPhoneNum || 'VILIV'}
+						watermarkText={phoneNumber || 'VILIV'}
 					/>
 					<div className="flex flex-col gap-4 rounded-md border p-6">
 						<div className="flex items-center justify-between">
