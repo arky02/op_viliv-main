@@ -6,21 +6,21 @@ import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import Link from 'next/link'
-import { useImgTypeState } from '@core/react/zustand/imgtype-store'
-import { redirect } from 'next/navigation'
 import { authService } from '@providers/auth'
+import { redirect } from 'next/navigation'
+import { useImgTypeState } from '@core/react/zustand/imgtype-store'
+import { userService } from '@/module/user/service'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
 import { convertToTimeFormatNumber } from '@/lib/util/convert-to-time-format-number'
-import { userService } from '@/module/user/service'
 import { TimestampAccordion } from './timestamp-accordion'
 import { SummaryEditModal } from './summary-edit-modal'
 import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
 import Slider from './lecture-slider'
-import VideoPlayer from './lecture-video-player'
+import VideoWithWatermark from './video-with-watermark'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -43,7 +43,7 @@ export function LectureDetailArea({
 	params,
 	lecture
 }: LectureDetailAreaProps) {
-	const { analyzedLecture } = lecture //Result
+	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
 	const [userPhoneNum, setUserPhoneNum] = useState<
 		string | null
@@ -107,10 +107,11 @@ export function LectureDetailArea({
 	return (
 		<div className="flex flex-col">
 			{/* 모바일 비디오 */}
-			<VideoPlayer
-				lecture={lecture}
-				watermarkText={userPhoneNum ?? 'VILIV'}
+			<VideoWithWatermark
+				src={lecture.videoUrl}
+				videoRef={mobileVideoRef}
 				device="mobile"
+				watermarkText={userPhoneNum || 'VILIV'}
 			/>
 			<div className="pc:hidden flex items-end p-4">
 				<LectureInfo lecture={lecture} />
@@ -130,9 +131,10 @@ export function LectureDetailArea({
 			<div className="max-pc:flex-col pc:mx-[120px] pc:mt-10 mx-4 flex gap-5">
 				<div className="bg-background pc:w-1/2 pc:sticky pc:top-10 flex h-fit flex-col gap-4 rounded-md border p-4 shadow">
 					{/* PC 비디오 */}
-					<VideoPlayer
-						lecture={lecture}
-						watermarkText={userPhoneNum ?? 'VILIV'}
+					<VideoWithWatermark
+						src={lecture.videoUrl}
+						videoRef={pcVideoRef}
+						watermarkText={userPhoneNum || 'VILIV'}
 					/>
 					<div className="flex flex-col gap-4 rounded-md border p-6">
 						<div className="flex items-center justify-between">

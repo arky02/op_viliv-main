@@ -4,8 +4,7 @@ const nextConfig = {
 	experimental: {
 		serverComponentsExternalPackages: [
 			'puppeteer-core',
-			'@sparticuz/chromium',
-			'plyr'
+			'@sparticuz/chromium'
 		]
 	},
 	images: {

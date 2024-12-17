@@ -3,7 +3,7 @@ import type { Config } from 'tailwindcss'
 import { sharedConfig } from '@configs/tailwindcss'
 
 const config: Pick<Config, 'presets'> = {
-	presets: [sharedConfig] as Config['presets']
+	presets: [sharedConfig]
 }
 
 export default config
