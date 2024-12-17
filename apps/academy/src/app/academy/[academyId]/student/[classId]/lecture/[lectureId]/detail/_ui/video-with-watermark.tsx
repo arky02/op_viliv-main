@@ -51,6 +51,9 @@ function VideoWithWatermark({
 		}
 
 		if (isPlaying) {
+			// 첫 페이지 로딩 시 바로 워터마크 표시
+			updateWatermarkPosition()
+
 			// 재생중일 때만 워터마크 띄우는 Interval 실행
 			interval = setInterval(
 				updateWatermarkPosition,
@@ -139,8 +142,8 @@ function VideoWithWatermark({
 					}
 					size={isOnFullscreen ? 42 : 35}
 					style={{
-						top: isOnFullscreen ? '12px' : '8px',
-						right: isOnFullscreen ? '12px' : '8px'
+						top: isOnFullscreen ? '12px' : '9px',
+						right: isOnFullscreen ? '12px' : '9px'
 					}}
 					className="max-pc:hidden absolute right-2 top-2 z-10 rounded px-2 py-1 text-white opacity-80"
 				/>
