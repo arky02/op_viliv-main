@@ -81,14 +81,10 @@ export function LectureDetailArea({
 			const session = await authService.getMySession()
 			if (!session) redirect('/start')
 
-			console.log("Session ", session)
-			console.log("userId ", session.user.id)
-
 			const phoneNumber =
 				await userService.getPhoneNumberByUserId(
 					session.user.id
 				)
-			console.log("Phone ", phoneNumber)
 			if (!phoneNumber) {
 				redirect('/error')
 			}
@@ -97,8 +93,6 @@ export function LectureDetailArea({
 
 		void getPhoneNumber()
 	}, [])
-
-	console.log("user pn", userPhoneNumber)
 
 	return (
 		<div className="flex flex-col">
