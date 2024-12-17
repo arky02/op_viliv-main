@@ -23,6 +23,7 @@ const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
 interface LectureDetailAreaProps {
 	lecture: GetLectureInfo
+	phoneNumber: string
 }
 
 interface Frame {
@@ -32,13 +33,11 @@ interface Frame {
 }
 
 export function LectureDetailArea({
-	lecture
+	lecture,
+	phoneNumber
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
-	const [userPhoneNum, setUserPhoneNum] = useState<
-		string | null
-	>(null)
 
 	const imgType = useImgTypeState()
 
@@ -76,24 +75,6 @@ export function LectureDetailArea({
 		await downloadPDF(url)
 	}
 
-	useEffect(() => {
-		const getPhoneNumber = async () => {
-			const session = await authService.getMySession()
-			if (!session) redirect('/start')
-
-			const phoneNumber =
-				await userService.getPhoneNumberByUserId(
-					session.user.id
-				)
-			if (!phoneNumber) {
-				redirect('/error')
-			}
-			setUserPhoneNum(phoneNumber)
-		}
-
-		void getPhoneNumber()
-	}, [])
-
 	return (
 		<div className="flex flex-col">
 			{/* 모바일 비디오 */}
@@ -101,7 +82,7 @@ export function LectureDetailArea({
 				src={lecture.videoUrl}
 				videoRef={mobileVideoRef}
 				device="mobile"
-				watermarkText={userPhoneNum || 'VILIV'}
+				watermarkText={phoneNumber || 'VILIV'}
 			/>
 			<div className="pc:hidden flex items-center p-4">
 				<LectureInfo lecture={lecture} />
@@ -124,7 +105,7 @@ export function LectureDetailArea({
 					<VideoWithWatermark
 						src={lecture.videoUrl}
 						videoRef={pcVideoRef}
-						watermarkText={userPhoneNum || 'VILIV'}
+						watermarkText={phoneNumber || 'VILIV'}
 					/>
 					<div className="flex flex-col gap-4 rounded-md border p-6">
 						<div className="flex items-center justify-between">
