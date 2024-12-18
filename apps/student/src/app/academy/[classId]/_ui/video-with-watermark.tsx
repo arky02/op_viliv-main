@@ -118,9 +118,10 @@ function VideoWithWatermark({
 					ref={videoRef}
 					src={src}
 					controls
+					disablePictureInPicture
 					onPlay={() => setIsPlaying(true)}
 					onPause={() => setIsPlaying(false)}
-					controlsList="nodownload noremoteplayback"
+					controlsList="nodownload noremoteplayback "
 					onContextMenu={(e) => e.preventDefault()}
 					playsInline
 					className={
