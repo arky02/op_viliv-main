@@ -1,15 +1,13 @@
 'use client'
 
 /* eslint-disable react/no-array-index-key */
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import Link from 'next/link'
-import { authService } from '@providers/auth'
-import { redirect } from 'next/navigation'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
-import { userService } from '@/module/user/service'
+import dynamic from 'next/dynamic'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
@@ -20,9 +18,12 @@ import { LectureStatusSwitch } from './lecture-status-switch'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
 import Slider from './lecture-slider'
-import VideoWithWatermark from './video-with-watermark'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
+
+const VideoWithWatermark = dynamic(
+	() => import('./video-with-watermark')
+)
 
 interface Frame {
 	frame: string
@@ -43,7 +44,7 @@ interface LectureDetailAreaProps {
 export function LectureDetailArea({
 	params,
 	lecture,
-	phoneNumber
+	phoneNumber = 'VILIV'
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}

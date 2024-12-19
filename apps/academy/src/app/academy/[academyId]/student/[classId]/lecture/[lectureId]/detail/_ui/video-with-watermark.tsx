@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from '@design-system/icon'
 
@@ -5,7 +7,7 @@ function VideoWithWatermark({
 	src,
 	videoRef,
 	device = 'pc',
-	watermarkText
+	watermarkText = ''
 }: {
 	src: string
 	videoRef: React.RefObject<HTMLVideoElement>
@@ -96,22 +98,17 @@ function VideoWithWatermark({
 	return (
 		<div
 			ref={videoContainerRef}
-			className={
-				isDevicePC ? 'content-center' : 'sticky top-0 z-[99]'
-			}
+			className={`w-full ${isDevicePC ? 'max-pc:hidden content-center' : 'pc:hidden sticky top-0 z-[99]'}`}
 		>
 			<div className="relative h-fit">
 				{/* Watermark */}
-				{isPlaying ? (
-					<div
-						className="pointer-events-none absolute right-1/2 top-1/2 z-[999] hidden text-sm font-semibold text-white opacity-50"
-						ref={watermarkRef}
-					>
-						{watermarkText}
-					</div>
-				) : (
-					<></>
-				)}
+				<div
+					suppressHydrationWarning
+					className={`${isPlaying ? 'hidden' : 'none'} pointer-events-none absolute right-1/2 top-1/2 z-[999] text-sm font-semibold text-white opacity-50`}
+					ref={watermarkRef}
+				>
+					{watermarkText}
+				</div>
 
 				{/* Video element */}
 				<video
@@ -119,16 +116,13 @@ function VideoWithWatermark({
 					src={src}
 					controls
 					disablePictureInPicture
+					suppressHydrationWarning
 					onPlay={() => setIsPlaying(true)}
 					onPause={() => setIsPlaying(false)}
-					controlsList="nodownload noremoteplayback "
+					controlsList="nodownload noremoteplayback"
 					onContextMenu={(e) => e.preventDefault()}
 					playsInline
-					className={
-						isDevicePC
-							? `max-pc:hidden w-full rounded-md`
-							: 'pc:hidden top-0 z-10 w-full'
-					}
+					className={`w-full ${isDevicePC ? 'rounded-md' : ''}`}
 				>
 					<track kind="captions" label="Korean" />
 				</video>
@@ -152,16 +146,16 @@ function VideoWithWatermark({
 
 			{/* CSS for hiding fullscreen button */}
 			<style>{`
-				video::-webkit-media-controls-fullscreen-button {
-					display: none !important;
-				}
-				video::-moz-media-controls-fullscreen-button {
-					display: none !important;
-				}
-				video::fullscreen video::-webkit-media-controls {
-					display: block;
-				}
-			`}</style>
+			video::-webkit-media-controls-fullscreen-button {
+				display: none !important;
+			}
+			video::-moz-media-controls-fullscreen-button {
+				display: none !important;
+			}
+			video::fullscreen video::-webkit-media-controls {
+				display: block;
+			}
+		`}</style>
 		</div>
 	)
 }
