@@ -7,7 +7,6 @@ import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import Link from 'next/link'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
-import dynamic from 'next/dynamic'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
@@ -20,10 +19,6 @@ import { LectureImgTypeSelect } from './lecture-img-type-select'
 import Slider from './lecture-slider'
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
-
-const VideoWithWatermark = dynamic(
-	() => import('./video-with-watermark')
-)
 
 interface Frame {
 	frame: string
@@ -38,16 +33,15 @@ interface LectureDetailAreaProps {
 		lectureId: string
 	}
 	lecture: GetLectureInfo
-	phoneNumber: string
 }
 
 export function LectureDetailArea({
 	params,
-	lecture,
-	phoneNumber = 'VILIV'
+	lecture
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
+
 	const imgType = useImgTypeState()
 
 	const calculateSegmentDuration = (
@@ -88,12 +82,17 @@ export function LectureDetailArea({
 	return (
 		<div className="flex flex-col">
 			{/* 모바일 비디오 */}
-			<VideoWithWatermark
+			<video
+				ref={mobileVideoRef}
 				src={lecture.videoUrl}
-				videoRef={mobileVideoRef}
-				device="mobile"
-				watermarkText={phoneNumber || 'VILIV'}
-			/>
+				controls
+				controlsList="nodownload"
+				onContextMenu={(e) => e.preventDefault()}
+				playsInline
+				className="pc:hidden sticky top-0 z-10 w-full"
+			>
+				<track kind="captions" label="Korean" />
+			</video>
 			<div className="pc:hidden flex items-end p-4">
 				<LectureInfo lecture={lecture} />
 				<LectureImgTypeSelect size="sm" />
@@ -112,11 +111,17 @@ export function LectureDetailArea({
 			<div className="max-pc:flex-col pc:mx-[120px] pc:mt-10 mx-4 flex gap-5">
 				<div className="bg-background pc:w-1/2 pc:sticky pc:top-10 flex h-fit flex-col gap-4 rounded-md border p-4 shadow">
 					{/* PC 비디오 */}
-					<VideoWithWatermark
+					<video
+						ref={pcVideoRef}
 						src={lecture.videoUrl}
-						videoRef={pcVideoRef}
-						watermarkText={phoneNumber || 'VILIV'}
-					/>
+						controls
+						controlsList="nodownload"
+						onContextMenu={(e) => e.preventDefault()}
+						playsInline
+						className="max-pc:hidden w-full rounded-md"
+					>
+						<track kind="captions" label="Korean" />
+					</video>
 					<div className="flex flex-col gap-4 rounded-md border p-6">
 						<div className="flex items-center justify-between">
 							<div className="text-lg font-semibold">
