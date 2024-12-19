@@ -42,7 +42,7 @@ function VideoWithWatermark({
 				watermarkRef.current.style.display = 'block'
 				// top, left 위치 20%~80% 사이로 랜덤하게 위치
 				const top = `${Math.random() * 60 + 21}%`
-				const left = `${Math.random() * 60 + 21}%`
+				const left = `${Math.random() * 50 + 21}%`
 				watermarkRef.current.style.top = top
 				watermarkRef.current.style.left = left
 			}
@@ -104,7 +104,7 @@ function VideoWithWatermark({
 				{/* Watermark */}
 				<div
 					suppressHydrationWarning
-					className={`${isPlaying ? 'hidden' : 'none'} pointer-events-none absolute right-1/2 top-1/2 z-[999] text-sm font-semibold text-white opacity-50`}
+					className={`${isPlaying ? 'hidden' : 'none'} pointer-events-none absolute right-1/2 top-1/2 z-[999] text-[12px] font-semibold text-white opacity-50`}
 					ref={watermarkRef}
 				>
 					{watermarkText}
