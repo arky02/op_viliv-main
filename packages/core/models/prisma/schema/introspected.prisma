@@ -1,0 +1,17 @@
+model AcademyClassToAcademyMember {
+  A String
+  B String
+
+  @@unique([A, B], map: "_AcademyClassToAcademyMember_AB_unique")
+  @@index([B], map: "_AcademyClassToAcademyMember_B_index")
+  @@map("_AcademyClassToAcademyMember")
+}
+
+model AcademyMemberToLecture {
+  A String
+  B String
+
+  @@unique([A, B], map: "_AcademyMemberToLecture_AB_unique")
+  @@index([B], map: "_AcademyMemberToLecture_B_index")
+  @@map("_AcademyMemberToLecture")
+}
