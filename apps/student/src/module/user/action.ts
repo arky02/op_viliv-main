@@ -6,7 +6,9 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import {
 	USER_INFORMATION_SELECT_CONFIG,
-	imageUpdateDto
+	deviceChangeReasonUpdateDto,
+	imageUpdateDto,
+	deviceUpdateDto,
 } from './model'
 import { userService } from './service'
 
@@ -40,4 +42,38 @@ export const imageUpdateAction = authAction
 		)
 		revalidatePath('/academy')
 		return updatedImageUrl
+	})
+
+	export const deviceUpdateAction = authAction
+	.metadata({
+		actionName: 'deviceUpdate'
+	})
+	.schema(deviceUpdateDto)
+	.action(async ({ parsedInput, ctx: { userId } }) => {
+		const updatedMobileDevice = await userService.updateMobileDeviceInfo(
+			userId,
+			parsedInput.device1
+		)
+		const updatedTabletDevice = await userService.updateTabletDeviceInfo(
+			userId,
+			parsedInput.device2
+		)
+		const updatedPCDevice = await userService.updatePcDeviceInfo(
+			userId,
+			parsedInput.device3
+		)
+		return {mobile: updatedMobileDevice, tablet: updatedTabletDevice, pc: updatedPCDevice}
+	})
+
+	export const deviceChangeReasonUpdateAction = authAction
+	.metadata({
+		actionName: 'deviceChangeReasonUpdate'
+	})
+	.schema(deviceChangeReasonUpdateDto)
+	.action(async ({ parsedInput, ctx: { userId } }) => {
+		const updatedDeviceChangeReason = await userService.updateDeviceChangeReason(
+			userId,
+			parsedInput.device_change_reason
+		)
+		return (updatedDeviceChangeReason || '') as string
 	})
