@@ -44,6 +44,7 @@ export const imageUpdateAction = authAction
 		return updatedImageUrl
 	})
 
+
 	export const deviceUpdateAction = authAction
 	.metadata({
 		actionName: 'deviceUpdate'
@@ -64,6 +65,7 @@ export const imageUpdateAction = authAction
 		)
 		return {mobile: updatedMobileDevice, tablet: updatedTabletDevice, pc: updatedPCDevice}
 	})
+	
 
 	export const deviceChangeReasonUpdateAction = authAction
 	.metadata({
@@ -75,5 +77,5 @@ export const imageUpdateAction = authAction
 			userId,
 			parsedInput.device_change_reason
 		)
-		return (updatedDeviceChangeReason || '') as string
+		return (updatedDeviceChangeReason || '')
 	})
