@@ -6,7 +6,7 @@ interface DialogProps {
 	isClassMemberExistModalOpened: boolean // 강의 존재하는 강사 수정 불가 모달
 	isLectureDeleteModalOpened: boolean // 강의 삭제 모달
 	isClassDeleteModalOpened: boolean // 그룹 삭제 모달
-	isDeviceControlModalOpened: false // 디바이스 제어 모달
+	isDeviceControlModalOpened: boolean // 디바이스 제어 모달
 }
 
 interface DialogStore extends DialogProps {

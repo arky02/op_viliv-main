@@ -1,12 +1,10 @@
 'use client'
 
-import { request } from 'node:http'
 import {
 	Button,
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogTrigger,
 	Textarea,
 	toast
 } from '@design-system/ui'
@@ -14,8 +12,7 @@ import { Icon } from '@design-system/icon'
 import { useAction } from '@core/react'
 import { useDialogStore } from '@core/react/zustand/dialog-store'
 import { useEffect, useState } from 'react'
-import { redirect } from 'next/navigation'
-import { set } from 'date-fns'
+import { useRouter } from 'next/navigation'
 import {
 	deviceChangeReasonUpdateAction,
 	deviceUpdateAction
@@ -23,7 +20,8 @@ import {
 import { getDeviceInfo, getDeviceType } from '../utils'
 
 interface DeviceControlModalProps {
-	academyGroupId: string
+	academyId: string
+	selectedAcademyId: string
 	device: { mobile: string; tablet: string; pc: string }
 	deviceChangeReason: string
 }
@@ -48,11 +46,14 @@ const MODAL_BUTTON_TEXT = {
 
 export function DeviceControlModal({
 	device: registeredDevice,
-	academyGroupId,
-	deviceChangeReason
+	academyId,
+	deviceChangeReason,
+	selectedAcademyId
 }: DeviceControlModalProps): JSX.Element {
 	const { isDeviceControlModalOpened, toggleDialog } =
 		useDialogStore()
+
+	const router = useRouter()
 
 	const [currState, setCurrState] = useState<
 		| 'init'
@@ -61,7 +62,6 @@ export function DeviceControlModal({
 		| 'validateFail'
 		| 'requestUpdate'
 		| 'requestQueued'
-		| 'redirect'
 	>('init')
 
 	const [currentDeviceType, setCurrentDeviceType] = useState<
@@ -82,6 +82,92 @@ export function DeviceControlModal({
 			'기관의 사유 확인 및 승인 이후 해당 기기로 접속 가능합니다',
 		requestQueued:
 			'기관의 사유 검토 및 승인을 기다리는 중이에요. 승인 이후 해당 기기로 접속 가능합니다.'
+	}
+
+	const isDeviceValidate = () => {
+		if (
+			currentDevice === 'unknown' ||
+			currentDeviceType === 'unknown'
+		) {
+			toast({
+				title: '현재 접속 기기를 확인할 수 없습니다',
+				description:
+					'다시 시도하거나 계속하여 실패할 경우 관라자에게 문의해주세요',
+				variant: 'negative'
+			})
+			return 'error'
+		}
+
+		const isDeviceUnregistered =
+			!registeredDevice[currentDeviceType]
+
+		console.log(
+			'registeredDevice ',
+			registeredDevice[currentDeviceType]
+		)
+
+		console.log('currentDevice ', currentDevice)
+		console.log('currentDeviceType ', currentDeviceType)
+
+		const isCurrentDeviceValid =
+			isDeviceUnregistered ||
+			registeredDevice[currentDeviceType] === currentDevice
+
+		isDeviceUnregistered && handleDeviceRegister()
+
+		console.log('isCurrentDeviceValid', isCurrentDeviceValid)
+		return isCurrentDeviceValid
+	}
+
+	const verifyDevice = () => {
+		if (deviceChangeReason) {
+			setCurrState('requestQueued')
+			return
+		}
+
+		const isValidDevice = isDeviceValidate()
+		if (isValidDevice === 'error') return
+
+		if (isValidDevice) {
+			setCurrState('validateSuccess')
+		} else {
+			setCurrState('validateFail')
+		}
+	}
+
+	const registerDeviceInfo = useAction(deviceUpdateAction, {
+		onSuccess: () => {
+			toast({
+				title: '기기 최초 등록 완료',
+				description: '이제부터 해당 기기로 접속할 수 있어요',
+				variant: 'positive'
+			})
+		},
+		onError: () => {
+			toast({
+				title: '기기 최초 등록 실패',
+				description:
+					'다시 시도하거나 계속하여 실패할 경우 관라자에게 문의해주세요',
+				variant: 'negative'
+			})
+		}
+	})
+
+	const handleDeviceRegister = () => {
+		registerDeviceInfo.execute({
+			device1:
+				currentDeviceType === 'mobile'
+					? currentDevice
+					: registeredDevice.mobile,
+			device2:
+				currentDeviceType === 'tablet'
+					? currentDevice
+					: registeredDevice.tablet,
+			device3:
+				currentDeviceType === 'pc'
+					? currentDevice
+					: registeredDevice.pc
+		})
 	}
 
 	const deviceChangeReasonUpdate = useAction(
@@ -106,41 +192,6 @@ export function DeviceControlModal({
 			}
 		}
 	)
-	// const updateDeviceInfo = useAction(deviceUpdateAction, {
-	// 	onSuccess: () => {
-	// 		toast({
-	// 			title: '기기 정보 업데이트 완료',
-	// 			description: '이제부터 해당 기기로 접속할 수 있어요',
-	// 			variant: 'positive'
-	// 		})
-	// 		setCurrState('validateSuccess')
-	// 	},
-	// 	onError: () => {
-	// 		toast({
-	// 			title: '기기 정보 업데이트 실패',
-	// 			description:
-	// 				'다시 시도하거나 계속하여 실패할 경우 관라자에게 문의해주세요',
-	// 			variant: 'negative'
-	// 		})
-	// 	}
-	// })
-
-	// const handleDeviceUpdate = () => {
-	// 	updateDeviceInfo.execute({
-	// 		device1:
-	// 			currentDeviceType === 'mobile'
-	// 				? currentDevice
-	// 				: registeredDevice.mobile,
-	// 		device2:
-	// 			currentDeviceType === 'tablet'
-	// 				? currentDevice
-	// 				: registeredDevice.tablet,
-	// 		device3:
-	// 			currentDeviceType === 'pc'
-	// 				? currentDevice
-	// 				: registeredDevice.pc
-	// 	})
-	// }
 
 	const submitDeviceChangeReason = () => {
 		if (reasonText.length < 10 || reasonText.length > 100) {
@@ -165,111 +216,43 @@ export function DeviceControlModal({
 		deviceChangeReasonUpdate.execute({
 			device_change_reason: JSON.stringify(finedReasonObj)
 		})
-		// updateDeviceInfo.execute({
-		// 	device1:
-		// 		currentDeviceType === 'mobile'
-		// 			? currentDevice
-		// 			: registeredDevice.mobile,
-		// 	device2:
-		// 		currentDeviceType === 'tablet'
-		// 			? currentDevice
-		// 			: registeredDevice.tablet,
-		// 	device3:
-		// 		currentDeviceType === 'pc'
-		// 			? currentDevice
-		// 			: registeredDevice.pc
-		// })
 	}
 
-	const isDeviceValidate = () => {
-		if (
-			currentDevice === 'unknown' ||
-			currentDeviceType === 'unknown'
-		) {
-			toast({
-				title: '현재 접속 기기를 확인할 수 없습니다',
-				description:
-					'다시 시도하거나 계속하여 실패할 경우 관라자에게 문의해주세요',
-				variant: 'negative'
-			})
-			return 'error'
-		}
-
-		console.log(
-			'registeredDevice ',
-			registeredDevice[currentDeviceType]
-		)
-		console.log('currentDevice ', currentDevice)
-		console.log('currentDeviceType ', currentDeviceType)
-
-		const isCurrentDeviceValid =
-			registeredDevice[currentDeviceType] === currentDevice
-
-		console.log('isCurrentDeviceValid', isCurrentDeviceValid)
-		return isCurrentDeviceValid
-	}
-
-	const verifyDevice = () => {
-		const isValidDevice = isDeviceValidate()
-		if (isValidDevice === 'error') return
-
-		if (isValidDevice) {
-			setCurrState('validateSuccess')
-		} else {
-			setCurrState('validateFail')
-		}
-	}
-
+	// currState에 따른 모달 계속하기 버튼 클릭 handle
 	const handleClick = () => {
 		switch (currState) {
 			case 'verifying':
 				verifyDevice()
 				break
 			case 'validateSuccess':
-				setCurrState('redirect')
+				router.push(`/academy/${academyId}`)
 				break
 			case 'validateFail':
 				setCurrState('requestUpdate')
-				// handleDeviceUpdate()
 				break
 			case 'requestUpdate':
 				submitDeviceChangeReason()
 				break
 			case 'requestQueued':
+				// 모달 닫기
 				toggleDialog('isDeviceControlModalOpened')
 				break
 			default:
 				break
 		}
 	}
-	// 사용 예
-	console.log(getDeviceInfo())
-	console.log(
-		'user',
-		registeredDevice[currentDeviceType] as string
-	)
-
-	useEffect(() => {
-		if (currState === 'redirect') {
-			console.log('redirect')
-			redirect(`/academy/${academyGroupId}`)
-		}
-	}, [currState, academyGroupId])
 
 	useEffect(() => {
 		const device = getDeviceInfo()
-		const deviceType = getDeviceType()
 		setCurrentDevice(device)
+
+		const deviceType = getDeviceType()
 		setCurrentDeviceType(deviceType)
 
-		if (deviceChangeReason) {
-			setCurrState('requestQueued')
-		} else {
-			setCurrState('verifying')
-		}
+		setCurrState('verifying')
 	}, [])
 
-	return (
+	return selectedAcademyId === academyId ? (
 		<Dialog
 			open={isDeviceControlModalOpened}
 			onOpenChange={() => {
@@ -285,12 +268,10 @@ export function DeviceControlModal({
 					/>
 					<div className="flex flex-col items-center justify-center gap-1 text-center">
 						<div className="text-xl font-semibold">
-							{currState !== 'redirect' &&
-								MODAL_TITLE_TEXT[currState]}
+							{MODAL_TITLE_TEXT[currState]}
 						</div>
 						<div className="text-secondary-foreground text-lg font-medium">
-							{currState !== 'redirect' &&
-								MODAL_DESCRIPTION_TEXT[currState]}
+							{MODAL_DESCRIPTION_TEXT[currState]}
 						</div>
 					</div>
 					{currState === 'requestUpdate' ? (
@@ -304,12 +285,13 @@ export function DeviceControlModal({
 							<Button variant="secondary">닫기</Button>
 						</DialogClose>
 						<Button onClick={handleClick}>
-							{currState !== 'redirect' &&
-								MODAL_BUTTON_TEXT[currState]}
+							{MODAL_BUTTON_TEXT[currState]}
 						</Button>
 					</div>
 				</div>
 			</DialogContent>
 		</Dialog>
+	) : (
+		<div />
 	)
 }
