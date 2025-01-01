@@ -101,21 +101,12 @@ export function DeviceControlModal({
 		const isDeviceUnregistered =
 			!registeredDevice[currentDeviceType]
 
-		console.log(
-			'registeredDevice ',
-			registeredDevice[currentDeviceType]
-		)
-
-		console.log('currentDevice ', currentDevice)
-		console.log('currentDeviceType ', currentDeviceType)
-
 		const isCurrentDeviceValid =
 			isDeviceUnregistered ||
 			registeredDevice[currentDeviceType] === currentDevice
 
 		isDeviceUnregistered && handleDeviceRegister()
 
-		console.log('isCurrentDeviceValid', isCurrentDeviceValid)
 		return isCurrentDeviceValid
 	}
 
@@ -211,8 +202,6 @@ export function DeviceControlModal({
 		}
 
 		// 기기 변경 사유 제출
-		console.log(reasonText)
-		console.log(finedReasonObj)
 		deviceChangeReasonUpdate.execute({
 			device_change_reason: JSON.stringify(finedReasonObj)
 		})
