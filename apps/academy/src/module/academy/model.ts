@@ -71,3 +71,12 @@ export const getLecturesInclude = {
 export type GetLectures = Prisma.LectureGetPayload<{
 	include: typeof getLecturesInclude
 }>
+
+
+export const toggleDeviceConstraintDto = z.object({
+	academyId: z.string(),
+	isConstrained: z.boolean()
+})
+export type ToggleDeviceConstraintDto = z.infer<
+	typeof toggleDeviceConstraintDto
+>
