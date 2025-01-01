@@ -79,7 +79,6 @@ export function PendingClassCard({
 	)
 }
 
-// TODO
 export function JoinedClassCard({
 	group,
 	device,
