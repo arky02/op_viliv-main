@@ -2,30 +2,57 @@
 
 import { Button, toast } from '@design-system/ui'
 import { useState } from 'react'
-import { useDebounce } from '@core/react'
 import { type GetClassInfo } from '@/module/academyClass/model'
 import { type GetStudents } from '@/module/student/model'
 import { StudentCard } from './student-card'
 import { InviteCodeEditModal } from './invite-code-edit-modal'
+import { DeviceChangeReasonCard } from './device-change-reason-card'
+
+interface DeviceChangeRequestType {
+	student: GetStudents
+	deviceChangeRequest: {
+		deviceToChange: string
+		deviceType: string
+		reason: string
+	}
+}
 
 interface StudentsManageListProps {
 	academyClassInfo: GetClassInfo
 	students: GetStudents[]
+	deviceChangeRequests: object[]
 }
 
 export function StudentsManageList({
 	academyClassInfo,
-	students
+	students,
+	deviceChangeRequests
 }: StudentsManageListProps) {
-	const [filter, setFilter] = useState<'학생' | '대기중'>(
-		'학생'
+	const [filter, setFilter] = useState<
+		'학생' | '대기중' | '기기 변경 요청'
+	>('학생')
+
+	const finedDeviceChangeRequests = deviceChangeRequests.map(
+		(obj) =>
+			({
+				...obj,
+				deviceChangeRequest: JSON.parse(
+					JSON.parse(
+						// @ts-expect-error "obj is typeof DeviceChangeRequestType"
+						obj?.deviceChangeReason.value as string
+					) as string
+				)
+			}) as DeviceChangeRequestType
 	)
-	const filteredStudents = students.filter((student) => {
-		if (filter === '학생') {
-			return !student.isPending
+
+	const filteredStudents = students.filter(
+		(student: GetStudents) => {
+			if (filter === '학생') {
+				return !student.isPending
+			}
+			return student.isPending
 		}
-		return student.isPending
-	})
+	)
 
 	const academyClassId = academyClassInfo.id
 	const inviteCode = academyClassInfo.inviteCode
@@ -82,11 +109,24 @@ export function StudentsManageList({
 					>
 						대기중
 					</div>
+					<div
+						className={`max-pc:w-1/2 rounded-sm px-4 py-2 text-center hover:cursor-pointer ${filter === '기기 변경 요청' ? 'bg-background' : 'bg-muted'}`}
+						onClick={() => setFilter('기기 변경 요청')}
+					>
+						기기 변경 요청
+					</div>
 				</div>
 				<div className="pc:gap-4 bg-background grid grid-cols-1 gap-3 divide-y rounded-xl border p-5">
-					{filteredStudents.map((student) => (
-						<StudentCard key={student.id} student={student} />
-					))}
+					{filter === '기기 변경 요청'
+						? finedDeviceChangeRequests.map((obj) => (
+								<DeviceChangeReasonCard
+									key={obj.student.id}
+									requestObj={obj}
+								/>
+							))
+						: filteredStudents.map((student) => (
+								<StudentCard key={student.id} student={student} />
+							))}
 				</div>
 			</div>
 		</div>
