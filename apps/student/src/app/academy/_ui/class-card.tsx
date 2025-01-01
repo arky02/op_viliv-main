@@ -1,9 +1,14 @@
+'use client'
+
 import { Icon } from '@design-system/icon'
 import Image from 'next/image'
-import Link from 'next/link'
 import { Badge, Separator } from '@design-system/ui'
+import { useDialogStore } from '@core/react/zustand/dialog-store'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import defaultImage from '@/lib/asset/image/square-default-image.png'
 import { type GetClassInfo } from '@/module/academyClass/model'
+import { DeviceControlModal } from './device-control-modal'
 
 interface PendingClassCardProps {
 	group: GetClassInfo
@@ -11,6 +16,8 @@ interface PendingClassCardProps {
 
 interface JoinedClassCardProps {
 	group: GetClassInfo
+	device: { mobile: string; tablet: string; pc: string }
+	deviceChangeReason: string
 }
 
 export function PendingClassCard({
@@ -72,12 +79,34 @@ export function PendingClassCard({
 	)
 }
 
+// TODO
 export function JoinedClassCard({
-	group
+	group,
+	device,
+	deviceChangeReason
 }: JoinedClassCardProps) {
+	const { toggleDialog } = useDialogStore()
+
+	const router = useRouter()
+
+	const [selectedAcademyId, setSelectedAcademyId] = useState<
+		string | null
+	>(null)
+
+	const verifyAcademyAccess = (academyId: string) => {
+		if (!group.academy.device_constraint_enabled)
+			router.push(`/academy/${academyId}`)
+		else {
+			setSelectedAcademyId(academyId)
+			toggleDialog('isDeviceControlModalOpened')
+		}
+	}
 	return (
-		<Link href={`/academy/${group.id}`}>
-			<div className="bg-background flex flex-col gap-5 rounded-xl border p-6 shadow">
+		<div>
+			<div
+				className="bg-background flex flex-col gap-5 rounded-xl border p-6 shadow"
+				onClick={() => verifyAcademyAccess(group.id)}
+			>
 				<Image
 					src={group.academy.image || defaultImage}
 					alt="img"
@@ -121,6 +150,14 @@ export function JoinedClassCard({
 					</div>
 				</div>
 			</div>
-		</Link>
+			{selectedAcademyId ? (
+				<DeviceControlModal
+					academyId={group.id}
+					device={device}
+					deviceChangeReason={deviceChangeReason}
+					selectedAcademyId={selectedAcademyId}
+				/>
+			) : null}
+		</div>
 	)
 }
