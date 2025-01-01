@@ -32,6 +32,15 @@ export default async function AcademyPage() {
 			session.user.id
 		)
 
+	const deviceInfo = await userService.getDeviceInfoByUserId(
+		session.user.id
+	)
+
+	const deviceChangeReason =
+		await userService.getDeviceChangeReasonByUserId(
+			session.user.id
+		)
+
 	return (
 		<div>
 			<GlobalHeader />
@@ -52,7 +61,12 @@ export default async function AcademyPage() {
 								<PendingClassCard key={group.id} group={group} />
 							))}
 							{joinedClasses.map((group) => (
-								<JoinedClassCard key={group.id} group={group} />
+								<JoinedClassCard
+									key={group.id}
+									group={group}
+									device={deviceInfo}
+									deviceChangeReason={deviceChangeReason}
+								/>
 							))}
 						</div>
 					) : (

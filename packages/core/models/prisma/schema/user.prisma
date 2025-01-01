@@ -1,17 +1,21 @@
 model User {
-  id             String          @id @default(cuid())
-  createdAt      DateTime        @default(now()) @db.Timestamptz(6)
-  updatedAt      DateTime        @updatedAt @db.Timestamptz(6)
-  name           String?
-  image          String?
-  email          String?         @unique
-  emailVerified  DateTime?
-  phoneNumber    String          @unique @map("phone_number")
-  hashedPassword String?
-  accounts       Account[]
-  sessions       Session[]
-  students       Student[]
-  academyMembers AcademyMember[]
+  id                   String          @id @default(cuid())
+  createdAt            DateTime        @default(now()) @db.Timestamptz(6)
+  updatedAt            DateTime        @updatedAt @db.Timestamptz(6)
+  name                 String?
+  image                String?
+  email                String?         @unique
+  emailVerified        DateTime?
+  phoneNumber          String          @unique @map("phone_number")
+  hashedPassword       String?
+  device1              String?
+  device2              String?
+  device3              String?
+  device_change_reason String?
+  accounts             Account[]
+  sessions             Session[]
+  students             Student[]
+  academyMembers       AcademyMember[]
 
   @@map("user")
 }
@@ -37,44 +41,35 @@ model Account {
 }
 
 model AcademyMember {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
-
+  id                String            @id @default(cuid())
+  createdAt         DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime          @updatedAt @db.Timestamptz(6)
   role              AcademyMemberRole
   isPending         Boolean           @default(true) @map("is_pending")
   isAlertSubscribed Boolean           @default(true) @map("is_alert_subscribed")
-
-  academyId String  @map("academy_id")
-  academy   Academy @relation(fields: [academyId], references: [id], onDelete: Cascade)
-
-  academyClasses AcademyClass[]
-  lectures       Lecture[]
-
-  phoneNumber String @map("phone_number")
-  user        User?  @relation(fields: [phoneNumber], references: [phoneNumber])
+  academyId         String            @map("academy_id")
+  phoneNumber       String            @map("phone_number")
+  academy           Academy           @relation(fields: [academyId], references: [id], onDelete: Cascade)
+  academyClasses    AcademyClass[]
+  lectures          Lecture[]
+  user              User?             @relation(fields: [phoneNumber], references: [phoneNumber])
 
   @@unique([academyId, phoneNumber])
   @@map("academy_member")
 }
 
 model Student {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime @updatedAt @db.Timestamptz(6)
-
-  isPending Boolean @default(true) @map("is_pending")
-
+  id             String        @id @default(cuid())
+  createdAt      DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime      @updatedAt @db.Timestamptz(6)
+  isPending      Boolean       @default(true) @map("is_pending")
   academyClassId String?       @map("academy_class_id")
+  phoneNumber    String        @map("phone_number")
+  userId         String?       @map("user_id")
+  academyId      String?
   academyClass   AcademyClass? @relation(fields: [academyClassId], references: [id])
-
-  phoneNumber String @map("phone_number")
-
-  userId String? @map("user_id")
-  user   User?   @relation(fields: [userId], references: [id])
-
-  Academy   Academy? @relation(fields: [academyId], references: [id])
-  academyId String?
+  user           User?         @relation(fields: [userId], references: [id])
+  Academy        Academy?      @relation(fields: [academyId], references: [id])
 
   @@map("student")
 }

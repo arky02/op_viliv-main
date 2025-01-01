@@ -59,6 +59,7 @@ export default async function AcademyMypage({
 				<UserInfo
 					userInfo={userInfo}
 					academyMemberInfo={academyMemberInfo}
+					academyInfo={academyInfo}
 				/>
 			</div>
 		</div>

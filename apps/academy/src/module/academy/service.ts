@@ -136,6 +136,21 @@ class AcademyService {
 			}
 		})
 	}
+
+	async toggleDeviceConstraint(
+		academyId: string,
+		isConstraint: boolean
+	) {
+		await db.academy.update({
+			where: {
+				id: academyId
+			},
+			data: {
+				device_constraint_enabled: isConstraint
+			}
+		})
+	}
+
 }
 
 export const academyService = new AcademyService()
