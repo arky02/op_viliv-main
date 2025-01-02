@@ -2,7 +2,7 @@
 
 import { authAction } from '@core/react'
 import { revalidatePath } from 'next/cache'
-import { createAcademyDto } from '@/module/academy/model'
+import { createAcademyDto, toggleDeviceConstraintDto } from '@/module/academy/model'
 import { academyService } from './service'
 
 export const createAcademyAction = authAction
@@ -29,3 +29,18 @@ export const createAcademyAction = authAction
 		})
 		revalidatePath('/academy')
 	})
+
+	export const toggleDeviceConstraintAction = authAction
+		.metadata({
+			actionName: 'toggleDeviceConstraint'
+		})
+		.schema(toggleDeviceConstraintDto)
+		.action(async ({ parsedInput }) => {
+			const { academyId, isConstrained } = parsedInput
+			await academyService.toggleDeviceConstraint(
+				academyId,
+				isConstrained
+			)
+		})
+	
+		

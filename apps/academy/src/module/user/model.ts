@@ -43,3 +43,16 @@ export const imageUpdateDto = z.object({
 	image: z.string()
 })
 export type ImageUpdateDto = z.infer<typeof imageUpdateDto>
+
+export const deviceUpdateDto =z.object({
+	device1: z.string(),
+	device2: z.string(),
+	device3: z.string()
+})
+export type DeviceUpdateDto = z.infer<typeof deviceUpdateDto>
+
+
+export const deviceChangeReasonUpdateDto = z.object({
+	device_change_reason: z.string()
+})
+export type DeviceChangeReasonUpdateDto = z.infer<typeof deviceChangeReasonUpdateDto>

@@ -1,23 +1,24 @@
 'use client'
 
 /* eslint-disable react/no-array-index-key */
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Badge, Button } from '@design-system/ui'
 import Image from 'next/image'
 import { Icon } from '@design-system/icon'
 import { useImgTypeState } from '@core/react/zustand/imgtype-store'
-import { authService } from '@providers/auth'
-import { redirect } from 'next/navigation'
+import dynamic from 'next/dynamic'
 import defaultImage from '@/lib/asset/image/horizontal-default-image.png'
 import { type GetLectureInfo } from '@/module/lecture/model'
 import { downloadPDF } from '@/hook/download-pdf'
 import { convertToTimeFormatNumber } from '@/lib/util/conver-to-time-format-number'
-import { userService } from '@/module/user/service'
 import { TimestampAccordion } from './timestamp-accordion'
 import { LectureInfo } from './lecture-info'
 import { LectureImgTypeSelect } from './lecture-img-type-select'
 import Slider from './lecture-slider'
-import VideoWithWatermark from './video-with-watermark'
+
+const VideoWithWatermark = dynamic(
+	() => import('./video-with-watermark')
+)
 
 const THUMBNAIL_IMG_BASE_URL = 'viliv.ngrok.dev/api/frames/'
 
@@ -34,7 +35,7 @@ interface Frame {
 
 export function LectureDetailArea({
 	lecture,
-	phoneNumber
+	phoneNumber = 'VILIV'
 }: LectureDetailAreaProps) {
 	const { analyzedLecture } = lecture
 	const { segments = [] } = analyzedLecture || {}
@@ -218,7 +219,7 @@ export function LectureDetailArea({
 								)}
 								<div className="text-sm">
 									{segment.summarization.length > 0 ? (
-										<ul className="list-inside list-disc">
+										<ul className="flex list-inside list-decimal flex-col gap-[5px]">
 											{segment.summarization.map((item) => (
 												<li key={item}>{item}</li>
 											))}
