@@ -219,7 +219,7 @@ export function LectureDetailArea({
 								)}
 								<div className="text-sm">
 									{segment.summarization.length > 0 ? (
-										<ul className="list-inside list-disc">
+										<ul className="flex list-inside list-decimal flex-col gap-[5px]">
 											{segment.summarization.map((item) => (
 												<li key={item}>{item}</li>
 											))}
